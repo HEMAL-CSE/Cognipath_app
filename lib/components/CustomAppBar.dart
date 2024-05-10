@@ -24,8 +24,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     // }
 
     return AppBar(
-      backgroundColor: Colors.blueAccent,
-      title: Text('${this.title}', style: TextStyle(color: Colors.black),),
+      backgroundColor: Color(0xff01013f),
+      title: Text('${this.title}', style: TextStyle(color: Colors.white),),
       centerTitle: true,
       actions: [
         GestureDetector(
@@ -34,7 +34,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           },
           child: Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Icon(Icons.logout, color: Colors.black,),
+            child: Icon(Icons.logout, color: Colors.white,),
           ),
         )
       ],
