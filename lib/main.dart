@@ -1,10 +1,15 @@
 import 'package:cognipath/Home.dart';
 import 'package:cognipath/Login.dart';
+import 'package:cognipath/Register.dart';
 import 'package:cognipath/StudentsDeshboard.dart';
 import 'package:cognipath/TeacherDeshboard.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // // Initialize Firebase SDK
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -21,6 +26,7 @@ class MyApp extends StatelessWidget {
         '/studentDeshboard': (context) => StudentDeshboard(),
         '/teacherDeshboard': (context) => TeacherDeshboard(),
         '/home' : (context) => Home(),
+        '/register': (context) => Register(),
 
       },
 

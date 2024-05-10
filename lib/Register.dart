@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-// import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,33 +24,21 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
 
   TextEditingController name = TextEditingController();
-  TextEditingController village = TextEditingController();
-  TextEditingController location = TextEditingController();
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+  TextEditingController institute = TextEditingController();
+
 
   bool buttonDisabled = false;
 
-  List<dynamic> divisions = [];
 
-  String? selectedDivision;
+List classes = [];
 
-  List<dynamic> districts = [];
-
-  String? selectedDistrict;
-
-  DateTime? lastDonatedDate = null;
-
-
-
-  List<dynamic> upazilas = [];
-
-  String? selectedUpazila;
-  String? blood_group;
-
-  List blood_groups = [];
+String? cls;
 
   List roles = [
-    {'name': 'Donor'},
-    {'name': 'Receiver'},
+    {'name': 'Student'},
+    {'name': 'Teacher'},
   ];
 
   String? role;
@@ -63,11 +51,9 @@ class _RegisterState extends State<Register> {
   var receivedID = '';
 
 
-   // final FirebaseAuth auth = FirebaseAuth.instance;
+   final FirebaseAuth auth = FirebaseAuth.instance;
 
-  TextEditingController search = TextEditingController();
 
-  Map searchedOptions = {};
 
 
    // late GoogleMapController mapController;
@@ -82,18 +68,18 @@ class _RegisterState extends State<Register> {
   // Set<Marker> markers = {};
   // Set<Marker> minimarkers = {};
 
-
-  void searchPlaces(search, setState) async {
-    final url = Uri.parse('https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$search&key=AIzaSyCUCHfupf6ppvDa6d1o8H19K4xvLPQ2lls');
-    Response res = await get(url);
-
-    var resbody = jsonDecode(res.body);
-    // print(resbody);
-
-    setState(() {
-      searchedOptions = resbody;
-    });
-  }
+  //
+  // void searchPlaces(search, setState) async {
+  //   final url = Uri.parse('https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$search&key=AIzaSyCUCHfupf6ppvDa6d1o8H19K4xvLPQ2lls');
+  //   Response res = await get(url);
+  //
+  //   var resbody = jsonDecode(res.body);
+  //   // print(resbody);
+  //
+  //   setState(() {
+  //     searchedOptions = resbody;
+  //   });
+  // }
 
   // void selectPlace(placeId, setState) async {
   //   final url = Uri.parse('https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&key=AIzaSyCUCHfupf6ppvDa6d1o8H19K4xvLPQ2lls');
@@ -150,12 +136,31 @@ class _RegisterState extends State<Register> {
   //   });
   // }
 
+  void studentRegister(user_id) async {
+    final url = Uri.parse('http://172.20.10.122:5001/student/add');
+
+    Map data = {'user_id': user_id.toString(), 'cls': cls, 'institute': institute.text};
+
+    Response res = await post(url, body: data);
+
+  }
+
+  void teacherRegister(user_id) async {
+    final url = Uri.parse('http://172.20.10.122:5001/teacher/add');
+
+    Map data = {'user_id': user_id.toString(), 'institute': institute.text};
+
+    Response res = await post(url, body: data);
+
+  }
+
 
   void verifyUserPhoneNumber() async {
     setState(() {
       buttonDisabled = true;
     });
-    Response res = await get(Uri.parse('http://68.178.163.174:5003/user/check_phone_number?phone_number=${phone_number.text}&role=${role}'));
+
+    Response res = await get(Uri.parse('http://172.20.10.122:5001/user/check_phone_number?phone_number=${phone_number.text}&role=${role}'));
     if(res.statusCode == 201){
       var json = jsonDecode(res.body);
       if(json['checked'] == 0){
@@ -169,168 +174,146 @@ class _RegisterState extends State<Register> {
             fontSize: 16.0
 
         );
-    //   }else if(json['checked'] == 1){
-    //     auth.verifyPhoneNumber(
-    //       phoneNumber: '+88' + phone_number.text,
-    //       verificationCompleted: (PhoneAuthCredential credential) async {
-    //         await auth.signInWithCredential(credential).then(
-    //               (value) => print('Logged In Successfully'),
-    //         );
-    //       },
-    //
-    //       verificationFailed: (FirebaseAuthException e) {
-    //         print(e.message);
-    //       },
-    //       codeSent: (String verificationId, int? resendToken) async {
-    //
-    //         receivedID = verificationId;
-    //         showOTP = true;
-    //         buttonDisabled = false;
-    //         setState(() {});
-    //       },
-    //       codeAutoRetrievalTimeout: (String verificationId) {
-    //         print('TimeOut');
-    //       },
-    //     );
-    //   }
+      }else if(json['checked'] == 1){
+        auth.verifyPhoneNumber(
+          phoneNumber: '+88' + phone_number.text,
+          verificationCompleted: (PhoneAuthCredential credential) async {
+            await auth.signInWithCredential(credential).then(
+                  (value) => print('Logged In Successfully'),
+            );
+          },
+
+          verificationFailed: (FirebaseAuthException e) {
+            print(e.message);
+          },
+          codeSent: (String verificationId, int? resendToken) async {
+
+            receivedID = verificationId;
+            showOTP = true;
+            buttonDisabled = false;
+            setState(() {});
+          },
+          codeAutoRetrievalTimeout: (String verificationId) {
+            print('TimeOut');
+          },
+        );
+      }
     }
 
-
   }
 
-  // void donorRegister(user_id) async {
-  //   final url = Uri.parse('http://68.178.163.174:5003/donor/add');
-  //
-  //   var x = markers.elementAt(0);
-  //   var lat = x.position.latitude;
-  //   var lang = x.position.longitude;
-  //
-  //   Map data = {'user_id': user_id.toString(), 'blood_group_id': blood_group.toString(),'lat': lat.toString(), 'lang': lang.toString(), 'last_donated_date': lastDonatedDate != null ? lastDonatedDate?.toIso8601String() : ''};
-  //
-  //   Response res = await post(url, body: data);
-  //
-  //   var resbody = jsonDecode(res.body);
-  // }
-
-  void receiverRegister(user_id) async {
-    final url = Uri.parse('http://68.178.163.174:5003/receiver/add');
-
-    Map data = {'user_id': user_id.toString()};
-
-    Response res = await post(url, body: data);
-
-    var resbody = jsonDecode(res.body);
-  }
-
-
-  // Future<void> verifyOTPCode() async {
-  //   setState(() {
-  //     buttonDisabled = true;
-  //   });
-  //   PhoneAuthCredential credential = PhoneAuthProvider.credential(
-  //     verificationId: receivedID,
-  //     smsCode: otp.text,
-  //   );
-  //   await auth
-  //       .signInWithCredential(credential)
-  //       .then((value) async {
-  //     final url = Uri.parse('http://68.178.163.174:5003/user/register');
-  //
-  //     Map data = {'name': name.text, 'mobile': phone_number.text, 'role': role.toString(), 'division': selectedDivision.toString(), 'district': selectedDistrict.toString(), 'upazila': selectedUpazila.toString(), 'village': village.text};
-  //
-  //     Response res = await post(url, body: data);
-  //
-  //     var resbody = jsonDecode(res.body);
-  //
-  //     if (res.statusCode == 201) {
-  //       Fluttertoast.showToast(
-  //           msg: "${resbody['msg']}",
-  //           toastLength: Toast.LENGTH_SHORT,
-  //           gravity: ToastGravity.CENTER,
-  //           timeInSecForIosWeb: 1,
-  //           backgroundColor: Colors.green,
-  //           textColor: Colors.white,
-  //           fontSize: 16.0
-  //
-  //       );
-  //       if(role == 'Donor'){
-  //         print('hello donor');
-  //         donorRegister(resbody['user_id']);
-  //       }
-  //       else if(role == 'Receiver'){
-  //         receiverRegister(resbody['user_id']);
-  //       }
-  //       Navigator.pushNamed(context, '/login');
-  //     }
-  //
-  //     if (res.statusCode == 403) {
-  //       Fluttertoast.showToast(
-  //           msg: "${resbody['msg']}",
-  //           toastLength: Toast.LENGTH_SHORT,
-  //           gravity: ToastGravity.CENTER,
-  //           timeInSecForIosWeb: 1,
-  //           backgroundColor: Colors.green,
-  //           textColor: Colors.white,
-  //           fontSize: 16.0
-  //
-  //       );
-  //     }
-  //
-  //     setState(() {
-  //       buttonDisabled = false;
-  //     });
-  //   });
-  // }
-
-  void getBloodGroups() async {
-    final url = Uri.parse('http://68.178.163.174:5003/blood_groups');
+  void getClasses() async {
+    final url = Uri.parse('http://172.20.10.122:5001/class');
 
     Response res = await get(url);
 
     setState(() {
-      blood_groups = jsonDecode(res.body);
+      classes = jsonDecode(res.body);
     });
   }
 
-  Future<void> getDivisions() async {
-    final String response = await rootBundle.loadString('assets/divisions.json');
-    final data = await jsonDecode(response);
-    print(data);
 
+
+
+  Future<void> verifyOTPCode() async {
     setState(() {
-      divisions = data;
+      buttonDisabled = true;
+    });
+    PhoneAuthCredential credential = PhoneAuthProvider.credential(
+      verificationId: receivedID,
+      smsCode: otp.text,
+    );
+    await auth
+        .signInWithCredential(credential)
+        .then((value) async {
+      final url = Uri.parse('http://172.20.10.122:5001/user/register');
+
+  Map data = {'name': name.text, 'email': email.text, 'mobile': phone_number.text, 'password': password.text, 'role': role};
+
+      Response res = await post(url, body: data);
+
+      var resbody = jsonDecode(res.body);
+
+      if (res.statusCode == 201) {
+        Fluttertoast.showToast(
+            msg: "${resbody['msg']}",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+            fontSize: 16.0
+
+        );
+        if(role == 'Student'){
+          studentRegister(resbody['user_id']);
+        }
+        if(role == 'Teacher'){
+          teacherRegister(resbody['user_id']);
+        }
+        Navigator.pushNamed(context, '/');
+      }
+
+      if (res.statusCode == 403) {
+        Fluttertoast.showToast(
+            msg: "${resbody['msg']}",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+            fontSize: 16.0
+
+        );
+      }
+
+      setState(() {
+        buttonDisabled = false;
+      });
     });
   }
 
-  Future<void> getUpazilas(id) async {
-    upazilas.clear();
-    final String response = await rootBundle.loadString('assets/upazilas.json');
-    final data = await jsonDecode(response);
-    print(data);
-    for(var i in data){
-      if(i['district_id'] == id){
-        setState(() {
-          upazilas.add(i);
-        });
-      }
-    }
 
-  }
 
-  Future<void> getDistricts(id) async {
-    districts.clear();
-    final String response = await rootBundle.loadString('assets/districts.json');
-    final data = await jsonDecode(response);
-    print(data);
-    for(var i in data){
-      if(i['division_id'] == id){
-        setState(() {
-          districts.add(i);
-        });
-      }
-    }
-
-  }
+  // Future<void> getDivisions() async {
+  //   final String response = await rootBundle.loadString('assets/divisions.json');
+  //   final data = await jsonDecode(response);
+  //   print(data);
+  //
+  //   setState(() {
+  //     divisions = data;
+  //   });
+  // }
+  //
+  // Future<void> getUpazilas(id) async {
+  //   upazilas.clear();
+  //   final String response = await rootBundle.loadString('assets/upazilas.json');
+  //   final data = await jsonDecode(response);
+  //   print(data);
+  //   for(var i in data){
+  //     if(i['district_id'] == id){
+  //       setState(() {
+  //         upazilas.add(i);
+  //       });
+  //     }
+  //   }
+  //
+  // }
+  //
+  // Future<void> getDistricts(id) async {
+  //   districts.clear();
+  //   final String response = await rootBundle.loadString('assets/districts.json');
+  //   final data = await jsonDecode(response);
+  //   print(data);
+  //   for(var i in data){
+  //     if(i['division_id'] == id){
+  //       setState(() {
+  //         districts.add(i);
+  //       });
+  //     }
+  //   }
+  //
+  // }
 
   Future<void> _selectDate(BuildContext context,setState, selectedDate, void setSelectedDate(value)) async {
     final DateTime? picked = await showDatePicker(
@@ -346,13 +329,11 @@ class _RegisterState extends State<Register> {
   }
 
 
-  // @override void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //   getBloodGroups();
-  //   getDivisions();
-  //   getLocation();
-  // }
+  @override void initState() {
+    // TODO: implement initState
+    super.initState();
+    getClasses();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -390,264 +371,38 @@ class _RegisterState extends State<Register> {
 
               SizedBox(height: 10,),
 
-              CustomDropdown(
-                  value: selectedDivision,
-                  data: divisions,
-                  hint: 'Select Division',
-                  onChanged: (value) {
-                    selectedDistrict = null;
-                    getDistricts(value);
-                    setState(() {
-                      selectedDivision = value;
-                    });
-                  },
-                  fieldNames: ['bn_name', 'id']),
 
-              CustomDropdown(
-                  value: selectedDistrict,
-                  data: districts,
-                  hint: 'Select District',
-                  onChanged: (value) {
-                    selectedUpazila = null;
-                    getUpazilas(value);
-                    setState(() {
-                      selectedDistrict = value;
-                    });
-                  },
-                  fieldNames: ['bn_name', 'id']),
-
-
-              CustomDropdown(
-                  value: selectedUpazila,
-                  data: upazilas,
-                  hint: 'Select Upazila',
-                  onChanged: (value) {
-
-                    setState(() {
-                      selectedUpazila = value;
-                    });
-                  },
-                  fieldNames: ['bn_name', 'id']),
-
-              CustomTextField(controller: village, hintText: 'Village', obscureText: false,
+              CustomTextField(controller: email, hintText: 'Email', obscureText: false,
                   textinputtypephone: false),
 
               SizedBox(height: 10,),
 
-              if(role == 'Donor')
+              CustomTextField(controller: password, hintText: 'Password', obscureText: true,
+                  textinputtypephone: false),
+
+              SizedBox(height: 10,),
+
+              CustomTextField(controller: institute, hintText: 'Institute', obscureText: false,
+                  textinputtypephone: false),
+
+              SizedBox(height: 10,),
+
+              if(role == 'Student')
                 Column(
                   children: [
                     CustomDropdown(
-                        value: blood_group,
-                        data: blood_groups,
-                        hint: 'Select Blood Group',
-                        onChanged: (value) {
-
-                          setState(() {
-                            blood_group = value;
-                          });
-                        },
-                        fieldNames: ['group', 'id']),
-
-                    CustomDatePicker(date: lastDonatedDate, selectDate: () {
-                      _selectDate(context, setState, lastDonatedDate, (value) { lastDonatedDate = value; });
-                    }, title: 'Last Donated Date: '),
-
+                      hint: 'Select CLass',
+                        value: cls,
+                        data: classes, onChanged: (value) {
+                      setState(() {
+                        cls = value;
+                      });
+                    }, fieldNames: ['class_name', 'id']),
                     SizedBox(height: 10,),
-
-                    GestureDetector(
-                      onTap: () {
-
-                        showGeneralDialog(
-                            context: context,
-                            barrierDismissible: true,
-                            barrierLabel:
-                            MaterialLocalizations.of(context).modalBarrierDismissLabel,
-                            barrierColor: Colors.black45,
-                            transitionDuration: const Duration(milliseconds: 200),
-                            pageBuilder: (BuildContext buildContext, Animation animation,
-                                Animation secondaryAnimation) {
-                              return StatefulBuilder(
-                                builder: (context, setStateSB) {
-                                  return   Stack(
-                                    children: [
-                                      // GoogleMap(
-                                      //   onTap: (latlang) {
-                                      //     // _onAddMarkerButtonPressed(latlang);
-                                      //     // var x = markers.map((e) => e.markerId == 'mark' ? Marker(markerId: MarkerId('mark'), position: latlang) : e).toSet();
-                                      //     var x = markers;
-                                      //     x.remove(x.elementAt(0));
-                                      //     x.add(Marker(markerId: MarkerId('mark'), position: latlang));
-                                      //     setStateSB(() {
-                                      //       // markers.add(Marker(markerId: MarkerId('mark'), position: latlang));
-                                      //       markers = x;
-                                      //     });
-                                      //   },
-                                      //   initialCameraPosition: CameraPosition(
-                                      //     target: _currentPosition!, // San Francisco coordinates
-                                      //     zoom: 12,
-                                      //   ),
-                                      //   onCameraMove: (latlang) {
-                                      //     setStateSB(() {
-                                      //       _currentPosition = LatLng(latlang.target.latitude, latlang.target.longitude);
-                                      //     });
-                                      //   },
-                                      //
-                                      //   markers: markers,
-                                      //   onMapCreated: (GoogleMapController controller) {
-                                      //     // mapController.dispose();
-                                      //     // if(!_controller.isCompleted){
-                                      //     //   _controller.complete(controller);
-                                      //     //
-                                      //     // }
-                                      //
-                                      //     mapController = controller;
-                                      //
-                                      //   },
-                                      //
-                                      // ),
-
-                                      // if (searchedOptions.isNotEmpty &&
-                                      //     searchedOptions['predictions'].length != 0)
-                                      //   Container(
-                                      //       margin: EdgeInsets.symmetric(vertical: 48),
-                                      //       height: 300.0,
-                                      //       width: double.infinity,
-                                      //       decoration: BoxDecoration(
-                                      //           color: Colors.black.withOpacity(.6),
-                                      //           backgroundBlendMode: BlendMode.darken)),
-
-
-
-                                      Column(
-                                        children: [
-                                          Container(
-                                            margin: EdgeInsets.fromLTRB(0, 48, 0, 0),
-                                            alignment: Alignment.topCenter,
-                                            child: Material(
-                                                color: Colors.transparent,
-                                                child: CustomTextField(
-                                                    controller: search,
-                                                    hintText: 'Search',
-                                                    obscureText: false,
-                                                    onChanged: (value) {
-                                                      searchPlaces(value, setStateSB);
-                                                    },
-                                                    textinputtypephone: false)
-                                            ),
-                                          ),
-                                          if (searchedOptions.isNotEmpty &&
-                                              searchedOptions['predictions'].length != 0)
-                                            Container(
-                                                margin: EdgeInsets.symmetric(vertical: 0),
-                                                // height: 300.0,
-                                                width: double.infinity,
-                                                decoration: BoxDecoration(
-                                                    color: Colors.black.withOpacity(.6),
-                                                    backgroundBlendMode: BlendMode.darken),
-                                                child: Column(
-                                                  crossAxisAlignment:  CrossAxisAlignment.start,
-                                                  children: [
-                                                    for(var i in searchedOptions['predictions'])
-                                                      Material(
-
-                                                        child: InkWell(
-                                                          onTap: () {
-                                                            // selectPlace(i['place_id'], setStateSB);
-                                                          },
-                                                          child: Padding(
-                                                            padding: const EdgeInsets.all(10.0),
-                                                            child: Container(
-                                                              child: Text(
-                                                                i['description'],
-                                                                style: TextStyle(decoration: TextDecoration.none,fontSize: 15,color: Colors.white, backgroundColor: Colors.transparent, ),
-                                                              ),
-                                                              width: MediaQuery.of(context).size.width,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        color: Colors.transparent,
-                                                      )
-                                                  ],
-                                                )
-                                            ),
-                                        ],
-                                      ),
-                                      // Container(
-                                      //   margin: EdgeInsets.symmetric(vertical: 20),
-                                      //   alignment: Alignment.bottomCenter,
-                                      //   child: ElevatedButton(
-                                      //     onPressed: () {
-                                      //       minimapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-                                      //         target: LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
-                                      //         zoom: 12,
-                                      //       )));
-                                      //       setState(() {
-                                      //         minimarkers = markers;
-                                      //       });
-                                      //       Navigator.pop(context);
-                                      //
-                                      //     },
-                                      //     child: Text('Set Map'),
-                                      //     style: ElevatedButton.styleFrom(
-                                      //       backgroundColor: Colors.yellowAccent,
-                                      //
-                                      //     ),
-                                      //   ),
-                                      // )
-                                    ],
-                                  );
-                                },
-                              );
-                            });
-                      },
-                       child: _currentPosition == null ?
-                      CircularProgressIndicator()
-                          : Container(
-                        margin: EdgeInsets.symmetric(vertical: 10),
-                        // padding: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
-                        decoration: BoxDecoration(
-                            color: Colors.grey
-                        ),
-                        child: SizedBox(
-                          height: 100,
-                          width: 300,
-                          child: Stack(
-                            children: [
-                              // if()
-                              // GoogleMap(
-                              //   initialCameraPosition: CameraPosition(
-                              //     target: _currentPosition!, // San Francisco coordinates
-                              //     zoom: 12,
-                              //   ),
-                              //
-                              //   markers: markers,
-                              //   onMapCreated: (GoogleMapController controller) {
-                              //     // mapController.dispose();
-                              //     // if(!_controller.isCompleted){
-                              //     //   _controller.complete(controller);
-                              //     //
-                              //     // }
-                              //
-                              //     minimapController = controller;
-                              //
-                              //   },
-                              //
-                              // ),
-                              Container(
-                                height: 100,
-                                width: 300,
-                                decoration: BoxDecoration(
-                                    color: Colors.transparent
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),),
-                    )
-
                   ],
                 ),
+
+
 
               CustomTextField(controller: phone_number, hintText: 'Phone Number', obscureText: false,
                   textinputtypephone: true),
@@ -662,7 +417,7 @@ class _RegisterState extends State<Register> {
                 margin: EdgeInsets.all(04),
                 child: ElevatedButton(onPressed: buttonDisabled ? null : (){
                   if(showOTP){
-                    // verifyOTPCode();
+                    verifyOTPCode();
                   } else{
                     verifyUserPhoneNumber();
                   }
@@ -685,7 +440,7 @@ class _RegisterState extends State<Register> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    onTap: () { Navigator.pushNamed(context, '/login'); },
+                    onTap: () { Navigator.pushNamed(context, '/'); },
                   ),
                 ],
               )

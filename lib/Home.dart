@@ -121,10 +121,10 @@ class _HomeState extends State<Home> {
               SharedPreferences prefs = await SharedPreferences.getInstance();
               String? role = await prefs.getString('role');
               print(role);
-              if(role == 'Donor'){
-                Navigator.pushNamed(context, '/donerDeshboard');
+              if(role == 'Student'){
+                Navigator.pushNamed(context, '/studentDeshboard');
               }else{
-                Navigator.pushNamed(context, '/login');
+                Navigator.pushNamed(context, '/');
 
               }
             },

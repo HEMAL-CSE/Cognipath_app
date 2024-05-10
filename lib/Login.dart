@@ -1,15 +1,16 @@
 import 'dart:convert';
+import 'dart:math';
 
-// import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:cognipath/components/CustomDropdown.dart';
 import 'package:cognipath/components/CustomTextField.dart';
 import 'package:flutter/material.dart';
-// import 'package:fluttertoast/fluttertoast.dart';
-// import 'package:healthcare/components/CustomAppBar.dart';
-// import 'package:healthcare/components/CustomDropdown.dart';
-// import 'package:healthcare/components/CustomTextField.dart';
-// import 'package:http/http.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:cognipath/components/CustomAppBar.dart';
+import 'package:cognipath/components/CustomDropdown.dart';
+import 'package:cognipath/components/CustomTextField.dart';
+import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -21,22 +22,11 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
 
   TextEditingController phone_number = TextEditingController();
-  TextEditingController otp = TextEditingController();
-  String? email;
-  String? password;
+  TextEditingController password = TextEditingController();
+
 
   bool buttonDisabled = false;
 
-  List roles = [
-    {'name': 'Donor'},
-    {'name': 'Receiver'},
-  ];
-
-  String? role;
-
-  bool showOTP = false;
-  var receivedID = '';
-  bool multipleRole = false;
 
 
   // final FirebaseAuth auth = FirebaseAuth.instance;
@@ -178,6 +168,67 @@ class _LoginState extends State<Login> {
   //   });
   // }
 
+  void login() async {
+    final url = Uri.parse('http://172.20.10.122:5001/user/login_with_phone_number');
+
+    Map data = {'phone': phone_number.text, 'password': password.text};
+
+    Response res = await post(url, body: data);
+
+    var resbody = jsonDecode(res.body);
+
+    if (res.statusCode == 403) {
+      Fluttertoast.showToast(
+          msg: "${resbody['msg']}",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0
+
+      );
+    }
+
+    if (res.statusCode == 201) {
+      print(resbody['role'] != 'Teacher');
+      if(resbody['role'] != 'Student' && resbody['role'] != 'Teacher'){
+        Fluttertoast.showToast(
+            msg: "User is not a student or teacher",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+            fontSize: 16.0
+
+        );
+      }else{
+        Fluttertoast.showToast(
+            msg: "${resbody['msg']}",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+            fontSize: 16.0
+
+        );
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('token', resbody['token']);
+        await prefs.setString('role', resbody['role']);
+        await prefs.setString('user_id', resbody['user_id'].toString());
+        if(resbody['role'] == 'Student'){
+          Navigator.pushNamed(context, '/studentDeshboard');
+        }
+        if(resbody['role'] == 'Teacher'){
+          Navigator.pushNamed(context, '/teacherDeshboard');
+        }
+      }
+
+    }
+  }
+
   @override void initState() {
     // TODO: implement initState
     super.initState();
@@ -205,40 +256,15 @@ class _LoginState extends State<Login> {
 
               SizedBox(height: 10,),
 
-              if(showOTP)
-                CustomTextField(controller: otp, hintText: 'OTP', obscureText: true,
-                    textinputtypephone: true),
+                CustomTextField(controller: password, hintText: 'Password', obscureText: true,
+                    textinputtypephone: false),
 
-              if(multipleRole)
-                Column(
-                  children: [
-                    Text(
-                      'You have registered as multiple user',
-                      style: TextStyle(color: Colors.grey[700]),
-                    ),
-                    SizedBox(height: 10,),
-                    CustomDropdown(
-                        value: role,
-                        data: roles,
-                        hint: 'Select',
-                        onChanged: (value) {
 
-                          setState(() {
-                            role = value;
-                          });
-                        },
-                        fieldNames: ['name', 'name']),
-                  ],
-                ),
 
               Container( padding: EdgeInsets.all(10),
                 margin: EdgeInsets.all(04),
                 child: ElevatedButton(onPressed: buttonDisabled ? null : (){
-                  if(showOTP){
-                    // verifyOTPCode();
-                  } else{
-                    // verifyUserPhoneNumber();
-                  }
+                login();
                 }, child: const Text("Login"),
 
 
