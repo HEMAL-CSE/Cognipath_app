@@ -34,18 +34,18 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('CogniPath', style: TextStyle(color: Colors.black),),
+      appBar: AppBar(title: const Text('CogniPath', style: TextStyle(color: Colors.white),),
         centerTitle: true,
         actions: <Widget>[
           IconButton(
-              icon: const Icon(Icons.notifications, color: Colors.black,),
+              icon: const Icon(Icons.notifications, color: Colors.white,),
               onPressed: () {}),
         ],
 
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Color(0xff01013f),
         leading: IconButton(onPressed: (){},
           icon: IconButton(
-            icon: const Icon(Icons.menu, color: Colors.black,),
+            icon: const Icon(Icons.menu, color: Colors.white,),
             onPressed: () {} ,
           ),
         ),
@@ -129,7 +129,7 @@ class _HomeState extends State<Home> {
               }
             },
             child: Card(
-              color:Colors.blue,
+              color: Color(0xff01013f),
               elevation: 5,
               margin: EdgeInsets.all(8),
               shape: RoundedRectangleBorder(
@@ -143,7 +143,7 @@ class _HomeState extends State<Home> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('Student Login',textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.black),),
+                      Text('Student Login',textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white),),
                       SizedBox(height: 10,),
                       Container(
                           padding: EdgeInsets.all(10),
@@ -151,7 +151,7 @@ class _HomeState extends State<Home> {
                               color: Colors.white.withOpacity(0.5),
                               borderRadius: BorderRadius.circular(8)
                           ),
-                          child: Icon(SimpleLineIcons.people, color: Colors.black,)
+                          child: Icon(SimpleLineIcons.people, color: Colors.white,)
                       )
                     ],
                   ),
@@ -175,7 +175,7 @@ class _HomeState extends State<Home> {
               }
             },
             child: Card(
-              color:Colors.blue,
+              color: Color(0xff01013f),
               elevation: 5,
               margin: EdgeInsets.all(8),
               shape: RoundedRectangleBorder(
@@ -189,7 +189,7 @@ class _HomeState extends State<Home> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('Teacher Login',textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17,color: Colors.black),),
+                      Text('Teacher Login',textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17,color: Colors.white),),
                       SizedBox(height: 10,),
                       Container(
                           padding: EdgeInsets.all(10),
@@ -197,7 +197,7 @@ class _HomeState extends State<Home> {
                               color: Colors.white.withOpacity(0.5),
                               borderRadius: BorderRadius.circular(8)
                           ),
-                          child: Icon(FontAwesome5Solid.chalkboard_teacher, color: Colors.black,)
+                          child: Icon(FontAwesome5Solid.chalkboard_teacher, color: Colors.white,)
                       )
                     ],
                   ),
