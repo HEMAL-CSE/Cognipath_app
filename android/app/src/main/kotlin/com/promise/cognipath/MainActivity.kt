@@ -1,4 +1,4 @@
-package com.example.cognipath
+package com.promise.cognipath
 
 import io.flutter.embedding.android.FlutterActivity
 
