@@ -137,7 +137,7 @@ String? cls;
   // }
 
   void studentRegister(user_id) async {
-    final url = Uri.parse('http://172.20.10.122:5001/student/add');
+    final url = Uri.parse('http://68.178.163.174:5001/student/add');
 
     Map data = {'user_id': user_id.toString(), 'cls': cls, 'institute': institute.text};
 
@@ -146,7 +146,7 @@ String? cls;
   }
 
   void teacherRegister(user_id) async {
-    final url = Uri.parse('http://172.20.10.122:5001/teacher/add');
+    final url = Uri.parse('http://68.178.163.174:5001/teacher/add');
 
     Map data = {'user_id': user_id.toString(), 'institute': institute.text};
 
@@ -160,7 +160,7 @@ String? cls;
       buttonDisabled = true;
     });
 
-    Response res = await get(Uri.parse('http://172.20.10.122:5001/user/check_phone_number?phone_number=${phone_number.text}&role=${role}'));
+    Response res = await get(Uri.parse('http://68.178.163.174:5001/user/check_phone_number?phone_number=${phone_number.text}&role=${role}'));
     if(res.statusCode == 201){
       var json = jsonDecode(res.body);
       if(json['checked'] == 0){
@@ -203,7 +203,7 @@ String? cls;
   }
 
   void getClasses() async {
-    final url = Uri.parse('http://172.20.10.122:5001/class');
+    final url = Uri.parse('http://68.178.163.174:5001/class');
 
     Response res = await get(url);
 
@@ -226,7 +226,7 @@ String? cls;
     await auth
         .signInWithCredential(credential)
         .then((value) async {
-      final url = Uri.parse('http://172.20.10.122:5001/user/register');
+      final url = Uri.parse('http://68.178.163.174:5001/user/register');
 
   Map data = {'name': name.text, 'email': email.text, 'mobile': phone_number.text, 'password': password.text, 'role': role};
 

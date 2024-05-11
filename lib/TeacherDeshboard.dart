@@ -1,5 +1,7 @@
 import 'package:cognipath/components/CustomAppBar.dart';
+import 'package:cognipath/components/WebView.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class TeacherDeshboard extends StatefulWidget {
   const TeacherDeshboard({super.key});
@@ -22,8 +24,19 @@ class _TeacherDeshboardState extends State<TeacherDeshboard> {
               children: [
                 SizedBox(height: 20,),
                 GestureDetector(
-                  onTap: () {
+                  onTap: () async{
                     // Navigator.pushNamed(context, '/requestedList');
+                    // final url = Uri.parse('https://www.promiseedutech.com/course-teacher/question-category');
+                    // if (!await launchUrl(url)) {
+                    // throw Exception('Could not launch $url');
+                    // }else{
+                    //   await launchUrl(url);
+                    // }
+
+
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => WebViewContainer('https://www.promiseedutech.com/course-teacher/login'),
+                        ),);
                   },
                   child: Card(
                     color: Color(0xff01013f),
@@ -61,6 +74,9 @@ class _TeacherDeshboardState extends State<TeacherDeshboard> {
                 GestureDetector(
                   onTap: () {
                     // Navigator.pushNamed(context, '/acceptedList');
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (context) => WebViewContainer('https://www.promiseedutech.com/course-teacher/login'),
+                    ),);
                   },
                   child: Card(
                     color: Color(0xff01013f),
@@ -97,6 +113,9 @@ class _TeacherDeshboardState extends State<TeacherDeshboard> {
                 GestureDetector(
                   onTap: () {
                     // Navigator.pushNamed(context, '/acceptedList');
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (context) => WebViewContainer('https://www.promiseedutech.com/course-teacher/login'),
+                    ),);
                   },
                   child: Card(
                     color: Color(0xff01013f),

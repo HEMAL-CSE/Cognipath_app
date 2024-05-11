@@ -169,7 +169,7 @@ class _LoginState extends State<Login> {
   // }
 
   void login() async {
-    final url = Uri.parse('http://172.20.10.122:5001/user/login_with_phone_number');
+    final url = Uri.parse('http://68.178.163.174:5001/user/login_with_phone_number');
 
     Map data = {'phone': phone_number.text, 'password': password.text};
 

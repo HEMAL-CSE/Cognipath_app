@@ -1,4 +1,5 @@
 import 'package:cognipath/components/CustomAppBar.dart';
+import 'package:cognipath/components/WebView.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
@@ -14,7 +15,7 @@ class _StudentDeshboardState extends State<StudentDeshboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Student Deshboard',),
+      appBar: CustomAppBar(title: 'Student Dashboard',),
 
         body: CustomScrollView(
           primary: false,
@@ -68,6 +69,9 @@ class _StudentDeshboardState extends State<StudentDeshboard> {
                   GestureDetector(
                     onTap: () {
                       // Navigator.pushNamed(context, '/sellinginfo');
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => WebViewContainer('https://www.promiseedutech.com'),
+                      ),);
                     },
                     child: Card(
                       color: Color(0xff01013f),
@@ -104,6 +108,9 @@ class _StudentDeshboardState extends State<StudentDeshboard> {
                   GestureDetector(
                     onTap: () {
                       // Navigator.pushNamed(context, '/sellinginfo');
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => WebViewContainer('https://www.promiseedutech.com'),
+                      ),);
                     },
                     child: Card(
                       color: Color(0xff01013f),
