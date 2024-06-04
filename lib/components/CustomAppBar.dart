@@ -27,6 +27,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: Color(0xff01013f),
       title: Text('${this.title}', style: TextStyle(color: Colors.white),),
       centerTitle: true,
+      leading: GestureDetector(
+        onTap: (){
+          Navigator.of(context).pop();
+        },
+        child: Icon(Icons.arrow_back, color: Colors.white,),
+      ),
       actions: [
         GestureDetector(
           onTap: () {
