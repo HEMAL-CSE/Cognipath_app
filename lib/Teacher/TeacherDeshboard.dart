@@ -25,7 +25,7 @@ class _TeacherDeshboardState extends State<TeacherDeshboard> {
                 SizedBox(height: 20,),
                 GestureDetector(
                   onTap: () async{
-                    // Navigator.pushNamed(context, '/requestedList');
+                    Navigator.pushNamed(context, '/create_question');
                     // final url = Uri.parse('https://www.promiseedutech.com/course-teacher/question-category');
                     // if (!await launchUrl(url)) {
                     // throw Exception('Could not launch $url');
@@ -34,9 +34,9 @@ class _TeacherDeshboardState extends State<TeacherDeshboard> {
                     // }
 
 
-                        Navigator.push(context, MaterialPageRoute(
-                          builder: (context) => WebViewContainer('https://www.promiseedutech.com/course-teacher/login'),
-                        ),);
+                        // Navigator.push(context, MaterialPageRoute(
+                        //   builder: (context) => WebViewContainer('https://www.promiseedutech.com/course-teacher/login'),
+                        // ),);
                   },
                   child: Card(
                     color: Color(0xff01013f),

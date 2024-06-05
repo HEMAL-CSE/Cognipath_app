@@ -3,8 +3,13 @@ import 'package:cognipath/Login.dart';
 import 'package:cognipath/Register.dart';
 import 'package:cognipath/StudentPages/GiveExamMCQ.dart';
 import 'package:cognipath/StudentPages/StudentPage.dart';
-import 'package:cognipath/StudentsDeshboard.dart';
-import 'package:cognipath/TeacherDeshboard.dart';
+import 'package:cognipath/Student/StudentsDeshboard.dart';
+import 'package:cognipath/Teacher/TeacherDeshboard.dart';
+import 'package:cognipath/Student/StudentsDeshboard.dart';
+import 'package:cognipath/Teacher/CreateBloomsQuestion.dart';
+import 'package:cognipath/Teacher/CreateMcqQuestion.dart';
+import 'package:cognipath/Teacher/CreateQuestion.dart';
+import 'package:cognipath/Teacher/TeacherDeshboard.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -31,6 +36,9 @@ class MyApp extends StatelessWidget {
         '/register': (context) => Register(),
         '/studentpage' : (context) => StudentPage(),
         '/giveExammcq' : (context) => GiveExamMcq(),
+        '/create_question': (context) => TeacherCreateQuestion(),
+        '/create_mcq_question': (context) => CreateMcqQuestion(),
+        '/create_blooms_question': (context) => CreateBloomsQuestion(),
 
       },
 

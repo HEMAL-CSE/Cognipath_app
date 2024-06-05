@@ -16,7 +16,7 @@ class CustomTextField extends StatelessWidget {
     required this.obscureText,
     required this.textinputtypephone,
     this.maxLines,
-    this.onChanged
+    this.onChanged,
 
   });
 
