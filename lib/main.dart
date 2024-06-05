@@ -1,6 +1,8 @@
 import 'package:cognipath/Home.dart';
 import 'package:cognipath/Login.dart';
 import 'package:cognipath/Register.dart';
+import 'package:cognipath/StudentPages/GiveExamMCQ.dart';
+import 'package:cognipath/StudentPages/StudentPage.dart';
 import 'package:cognipath/StudentsDeshboard.dart';
 import 'package:cognipath/TeacherDeshboard.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -27,6 +29,8 @@ class MyApp extends StatelessWidget {
         '/teacherDeshboard': (context) => TeacherDeshboard(),
         '/home' : (context) => Home(),
         '/register': (context) => Register(),
+        '/studentpage' : (context) => StudentPage(),
+        '/giveExammcq' : (context) => GiveExamMcq(),
 
       },
 

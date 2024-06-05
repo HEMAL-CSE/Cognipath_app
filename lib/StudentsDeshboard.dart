@@ -68,10 +68,7 @@ class _StudentDeshboardState extends State<StudentDeshboard> {
 
                   GestureDetector(
                     onTap: () {
-                      // Navigator.pushNamed(context, '/sellinginfo');
-                      Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => WebViewContainer('https://www.promiseedutech.com'),
-                      ),);
+                      Navigator.pushNamed(context, '/studentpage');
                     },
                     child: Card(
                       color: Color(0xff01013f),
