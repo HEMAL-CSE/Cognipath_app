@@ -41,7 +41,7 @@ class _TeacherDeshboardState extends State<TeacherDeshboard> {
                   child: Card(
                     color: Color(0xff01013f),
                     elevation: 5,
-                    margin: EdgeInsets.all(21),
+                    margin: EdgeInsets.all(12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(96.0),
                     ),
@@ -73,15 +73,15 @@ class _TeacherDeshboardState extends State<TeacherDeshboard> {
 
                 GestureDetector(
                   onTap: () {
-                    // Navigator.pushNamed(context, '/acceptedList');
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => WebViewContainer('https://www.promiseedutech.com/course-teacher/login'),
-                    ),);
+                    Navigator.pushNamed(context, '/set_exam');
+                    // Navigator.push(context, MaterialPageRoute(
+                    //   builder: (context) => WebViewContainer('https://www.promiseedutech.com/course-teacher/login'),
+                    // ),);
                   },
                   child: Card(
                     color: Color(0xff01013f),
                     elevation: 5,
-                    margin: EdgeInsets.all(20),
+                    margin: EdgeInsets.all(16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(96.0),
                     ),
@@ -157,7 +157,7 @@ class _TeacherDeshboardState extends State<TeacherDeshboard> {
                         padding: const EdgeInsets.all(09.0),
                       child: Text('Powered By', style: TextStyle(),),
                     ),
-                    Image.asset('assets/logo.jfif', width: 100,),
+                    Image.asset('assets/logo.jfif', width: 98,),
 
                   ],
                 )

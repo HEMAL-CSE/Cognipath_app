@@ -24,7 +24,7 @@ class _StudentPageState extends State<StudentPage> {
                 child: Card(
                   color: Color(0xff01013f),
                   elevation: 5,
-                  margin: EdgeInsets.symmetric(vertical: 30),
+                  margin: EdgeInsets.symmetric(vertical: 32),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20.0),
                   ),
@@ -51,7 +51,7 @@ class _StudentPageState extends State<StudentPage> {
               SizedBox(width: 10,),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, '/create_blooms_question');
+                  Navigator.pushNamed(context, '/giveExamblooms');
                 },
                 child: Card(
                   color: Color(0xff01013f),
@@ -80,6 +80,7 @@ class _StudentPageState extends State<StudentPage> {
                   ),
                 ),
               ),
+
 
             ],
           ),

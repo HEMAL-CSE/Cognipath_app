@@ -31,7 +31,7 @@ class CustomTextField extends StatelessWidget {
         obscureText: obscureText,
         keyboardType: textinputtypephone ? TextInputType.phone : TextInputType.text,
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+          contentPadding: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
             enabledBorder:  OutlineInputBorder(
               borderRadius: BorderRadius.circular(15),
               borderSide: BorderSide(color: Colors.black54),

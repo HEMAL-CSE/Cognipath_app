@@ -11,7 +11,7 @@ class CustomDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Container( padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+    return  Container( padding: EdgeInsets.symmetric(horizontal: 2, vertical: 12),
       child: InputDecorator(
           decoration: InputDecoration(
             border:

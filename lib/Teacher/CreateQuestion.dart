@@ -84,7 +84,7 @@ class _TeacherCreateQuestionState extends State<TeacherCreateQuestion> {
               SizedBox(width: 10,),
               GestureDetector(
                 onTap: () {
-                  // Navigator.pushNamed(context, '/create_mcq_question');
+                  Navigator.pushNamed(context, '/create_chapter');
                 },
                 child: Card(
                   color: Color(0xff01013f),
