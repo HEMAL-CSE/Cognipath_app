@@ -63,11 +63,20 @@ class _SetExamState extends State<SetExam> {
   }
 
   addExam() async {
-    final url = Uri.parse('http://68.178.163.174:5001/exam/blooms/add');
+
+    final url = Uri.parse('http://68.178.163.174:5001/exam/add');    
+    
+    Map data = {'exam_category': 'blooms', 'chapter_id': chapter};
+    
+    Response res = await post(url, body: data);
+
+    var resbody = jsonDecode(res.body);
+    
+    final url1 = Uri.parse('http://68.178.163.174:5001/exam/blooms/add');
     for(var i in questions){
       if(i[i.keys.toList()[0]][0]['selected'] == true){
-        Map data = {'stem_id': i.keys.toList()[0].toString()};
-        Response res = await post(url, body: data);
+        Map data1 = {'stem_id': i.keys.toList()[0].toString(), 'exam_id': resbody[0]['id'].toString()};
+        Response res = await post(url1, body: data1);
         print(res.statusCode);
       }
     }
@@ -106,10 +115,10 @@ class _SetExamState extends State<SetExam> {
               });
             }, fieldNames: ['chapter_name', 'id']),
             SizedBox(height: 10,),
-            ElevatedButton(onPressed: () {
-
-            },
-            child: Text('Search')),
+            // ElevatedButton(onPressed: () {
+            //
+            // },
+            // child: Text('Search')),
 
             SizedBox(height: 20,),
 
