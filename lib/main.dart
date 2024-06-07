@@ -11,6 +11,7 @@ import 'package:cognipath/Teacher/CreateBloomsQuestion.dart';
 import 'package:cognipath/Teacher/CreateChapter.dart';
 import 'package:cognipath/Teacher/CreateMcqQuestion.dart';
 import 'package:cognipath/Teacher/CreateQuestion.dart';
+import 'package:cognipath/Teacher/GiveMarks.dart';
 import 'package:cognipath/Teacher/SetExam.dart';
 import 'package:cognipath/Teacher/TeacherDeshboard.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -44,8 +45,10 @@ class MyApp extends StatelessWidget {
         '/create_blooms_question': (context) => CreateBloomsQuestion(),
         '/create_chapter': (context) => CreateChapter(),
         '/set_exam': (context) => SetExam(),
+
         '/giveExamblooms': (context) => GiveExamBlooms(),
 
+        '/give_marks': (context) => GiveMarks(),
 
       },
 
