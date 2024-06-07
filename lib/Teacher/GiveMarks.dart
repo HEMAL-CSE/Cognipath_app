@@ -45,15 +45,7 @@ class _GiveMarksState extends State<GiveMarks> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? course_id = await prefs.getString('course_id');
 
-    final url = Uri.parse('http://68.178.163.174:5001/student/?course_id=${course_id}');
 
-    Response res = await get(url);
-
-    var resbody = jsonDecode(res.body);
-
-    var results = [];
-
-    for(var i in resbody){
       final url = Uri.parse('http://68.178.163.174:5001/exam/${category}/answers?chapter_id=${chapter}');
 
       Response res = await get(url);
@@ -76,19 +68,29 @@ class _GiveMarksState extends State<GiveMarks> {
           .entries
           .map((e) => {e.key: e.value})
           .toList();
-      i['questions'] = result;
-      results.add(i);
-    }
+
+      print(result);
 
     setState(() {
-      students = results;
+      students = result;
     });
   }
 
   addMarks() async {
     if(category == 'blooms'){
-      final url = Uri.parse('http://68.178.163.174:5001/exam/blooms/marks/add');
+
       // Map data = {'exam_id': };
+      for(var i in students){
+        for(var k in i[i.keys.toList()[0]]){
+          final url = Uri.parse('http://68.178.163.174:5001/exam/blooms/marks/add?id=${k['answer_id']}');
+          Map data = {'marks': k['given_marks'].text};
+          if(k['given_marks'].text != ''){
+            Response res = await put(url, body: data);
+          }
+        }
+      }
+
+
 
     }
   }
@@ -163,36 +165,36 @@ class _GiveMarksState extends State<GiveMarks> {
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   child: Column(
                     children: [
-                      Text('Name: ${i['name']}', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-                      for(var j in i['questions'])
-                        Column(
+                      Text('Name: ${i[i.keys.toList()[0]][0]['name']}', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                        Text('Ques:  ${students.indexOf(i) +1}', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                        Wrap(
                           children: [
-                            Text('Ques:  ${i['questions'].indexOf(j) +1}', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-                            Wrap(
-                              children: [
-                                for(var k in j[j.keys.toList()[0]])
-                                  Row(
-                                    children: [
-                                      SizedBox(width: 10,),
-                                      Text('${k['ques_point']}.', style: TextStyle(fontWeight: FontWeight.w800),),
-                                      SizedBox(width: 5,),
-                                      Container(
-                                          margin: EdgeInsets.symmetric(vertical: 10),
-                                          width: 90,
-                                          child: CustomTextField(controller: k['given_marks'], hintText: 'marks', obscureText: false, textinputtypephone: false)),
-                                      Text('[${k['ques_marks']}]')
-                                    ],
-                                  ),
-                              ],
-                            )
-
+                            for(var k in i[i.keys.toList()[0]])
+                              Row(
+                                children: [
+                                  SizedBox(width: 10,),
+                                  Text('${k['ques_point']}.', style: TextStyle(fontWeight: FontWeight.w800),),
+                                  SizedBox(width: 5,),
+                                  Flexible(child: Text('${k['answer']}')),
+                                  SizedBox(width: 5,),
+                                  Container(
+                                      margin: EdgeInsets.symmetric(vertical: 10),
+                                      width: 90,
+                                      child: CustomTextField(controller: k['given_marks'], hintText: 'marks', obscureText: false, textinputtypephone: false)),
+                                  Text('[${k['ques_marks']}]')
+                                ],
+                              ),
                           ],
                         ),
 
                     ],
                   ),
                 ),
-              )
+              ),
+
+            ElevatedButton(onPressed: () {
+              addMarks();
+            }, child: Text('Submit'))
 
           ],
         ),

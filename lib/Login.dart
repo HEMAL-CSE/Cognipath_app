@@ -218,6 +218,11 @@ class _LoginState extends State<Login> {
         await prefs.setString('role', resbody['role']);
         await prefs.setString('user_id', resbody['user_id'].toString());
         if(resbody['role'] == 'Student'){
+          final url = Uri.parse('http://68.178.163.174:5001/student/?user_id=${resbody['user_id']}');
+          Response res = await get(url);
+          var resbody2 = jsonDecode(res.body);
+          print(resbody2);
+          prefs.setString('course_id', resbody2[0]['course_id'].toString());
           Navigator.pushNamed(context, '/studentDeshboard');
         }
         if(resbody['role'] == 'Teacher'){
