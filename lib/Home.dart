@@ -206,6 +206,21 @@ class _HomeState extends State<Home> {
             ),
           ),
 
+          SizedBox(height: 14,),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(09.0),
+                child: Text('Powered By', style: TextStyle(),),
+              ),
+              Image.asset('assets/logo.jfif', width: 92),
+
+            ],
+          )
+
         ],
 
 

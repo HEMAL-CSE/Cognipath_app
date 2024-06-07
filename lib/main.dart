@@ -1,6 +1,11 @@
 import 'package:cognipath/Home.dart';
 import 'package:cognipath/Login.dart';
 import 'package:cognipath/Register.dart';
+import 'package:cognipath/StudentPages/GiveExamBlooms.dart';
+import 'package:cognipath/StudentPages/GiveExamMCQ.dart';
+import 'package:cognipath/StudentPages/StudentPage.dart';
+import 'package:cognipath/Student/StudentsDeshboard.dart';
+import 'package:cognipath/Teacher/TeacherDeshboard.dart';
 import 'package:cognipath/Student/StudentsDeshboard.dart';
 import 'package:cognipath/Teacher/CreateBloomsQuestion.dart';
 import 'package:cognipath/Teacher/CreateChapter.dart';
@@ -33,11 +38,16 @@ class MyApp extends StatelessWidget {
         '/teacherDeshboard': (context) => TeacherDeshboard(),
         '/home' : (context) => Home(),
         '/register': (context) => Register(),
+        '/studentpage' : (context) => StudentPage(),
+        '/giveExammcq' : (context) => GiveExamMcq(),
         '/create_question': (context) => TeacherCreateQuestion(),
         '/create_mcq_question': (context) => CreateMcqQuestion(),
         '/create_blooms_question': (context) => CreateBloomsQuestion(),
         '/create_chapter': (context) => CreateChapter(),
         '/set_exam': (context) => SetExam(),
+
+        '/giveExamblooms': (context) => GiveExamBlooms(),
+
         '/give_marks': (context) => GiveMarks(),
 
       },

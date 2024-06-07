@@ -41,7 +41,7 @@ class _TeacherDeshboardState extends State<TeacherDeshboard> {
                   child: Card(
                     color: Color(0xff01013f),
                     elevation: 5,
-                    margin: EdgeInsets.all(21),
+                    margin: EdgeInsets.all(12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(96.0),
                     ),
@@ -81,7 +81,7 @@ class _TeacherDeshboardState extends State<TeacherDeshboard> {
                   child: Card(
                     color: Color(0xff01013f),
                     elevation: 5,
-                    margin: EdgeInsets.all(20),
+                    margin: EdgeInsets.all(16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(96.0),
                     ),
@@ -149,12 +149,24 @@ class _TeacherDeshboardState extends State<TeacherDeshboard> {
                   ),
                 ),
 
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                        padding: const EdgeInsets.all(09.0),
+                      child: Text('Powered By', style: TextStyle(),),
+                    ),
+                    Image.asset('assets/logo.jfif', width: 98,),
+
+                  ],
+                )
+
               ],
             ),
           )
 
       ),
-
 
     );
   }

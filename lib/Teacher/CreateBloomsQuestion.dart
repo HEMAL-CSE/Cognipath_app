@@ -194,8 +194,6 @@ class _CreateBloomsQuestionState extends State<CreateBloomsQuestion> {
 
                         ),
 
-
-
                       ],
                     ),
                     SizedBox(width: 25,),
