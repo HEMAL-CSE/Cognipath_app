@@ -5,6 +5,7 @@ import 'package:cognipath/components/CustomTextField.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateChapter extends StatefulWidget {
   const CreateChapter({super.key});
@@ -30,8 +31,11 @@ class _CreateChapterState extends State<CreateChapter> {
   }
 
   addChapter() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    String? course_id = await prefs.getString('course_id');
     final url = Uri.parse('http://68.178.163.174:5001/chapter/add');
-    Map data = {'chapter_name': chapter.text};
+    Map data = {'chapter_name': chapter.text, 'course_id': course_id.toString()};
 
     Response res = await post(url, body: data);
 

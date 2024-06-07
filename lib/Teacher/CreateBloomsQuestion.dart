@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateBloomsQuestion extends StatefulWidget {
   const CreateBloomsQuestion({super.key});
@@ -38,7 +39,10 @@ class _CreateBloomsQuestionState extends State<CreateBloomsQuestion> {
   }
 
   getChapters() async {
-    final url = Uri.parse('http://68.178.163.174:5001/chapter/');
+     SharedPreferences prefs = await SharedPreferences.getInstance();
+     String? course_id = await prefs.getString('course_id');
+
+    final url = Uri.parse('http://68.178.163.174:5001/chapter/?course_id=${course_id}');
 
     Response res = await get(url);
 
@@ -281,9 +285,7 @@ class _CreateBloomsQuestionState extends State<CreateBloomsQuestion> {
                                 ],
                               ),
 
-                            ElevatedButton(onPressed: () {
 
-                            }, child: Text('Submit'))
                           ],
                         ),
                       ),

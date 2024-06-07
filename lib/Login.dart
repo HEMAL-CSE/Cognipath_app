@@ -191,7 +191,6 @@ class _LoginState extends State<Login> {
     }
 
     if (res.statusCode == 201) {
-      print(resbody['role'] != 'Teacher');
       if(resbody['role'] != 'Student' && resbody['role'] != 'Teacher'){
         Fluttertoast.showToast(
             msg: "User is not a student or teacher",
@@ -222,6 +221,12 @@ class _LoginState extends State<Login> {
           Navigator.pushNamed(context, '/studentDeshboard');
         }
         if(resbody['role'] == 'Teacher'){
+          final url = Uri.parse('http://68.178.163.174:5001/teacher/?user_id=${resbody['user_id']}');
+          Response res = await get(url);
+          var resbody2 = jsonDecode(res.body);
+          print(resbody2);
+          prefs.setString('course_id', resbody2[0]['course_id'].toString());
+
           Navigator.pushNamed(context, '/teacherDeshboard');
         }
       }
