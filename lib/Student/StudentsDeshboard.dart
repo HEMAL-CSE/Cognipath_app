@@ -68,7 +68,7 @@ class _StudentDeshboardState extends State<StudentDeshboard> {
 
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, '/studentpage');
+                      Navigator.pushNamed(context, '/giveExamblooms');
                     },
                     child: Card(
                       color: Color(0xff01013f),
