@@ -5,6 +5,7 @@ import 'package:cognipath/components/CustomDropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SetExam extends StatefulWidget {
   const SetExam({super.key});
@@ -15,22 +16,18 @@ class SetExam extends StatefulWidget {
 
 class _SetExamState extends State<SetExam> {
 
-  String? chapter;
-  List chapters = [];
+
   List questions = [];
 
-  getChapters() async {
-    final url = Uri.parse('http://68.178.163.174:5001/chapter/');
-
-    Response res = await get(url);
-
-    setState(() {
-      chapters = jsonDecode(res.body);
-    });
-  }
-
   getQuestions() async {
-    final url = Uri.parse('http://68.178.163.174:5001/questions');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? class_id = prefs.getString('class_id');
+    String? teacher_role = prefs.getString('teacher_role');
+    String? subject_id = prefs.getString('subject_id');
+    String? course_id = prefs.getString('course_id');
+
+    final url = teacher_role == 'Up to HSC' ?  Uri.parse('http://68.178.163.174:5001/questions/school?class_id=${class_id}&subject_id=${subject_id}') : teacher_role == 'Undergraduate' ? Uri.parse('http://68.178.163.174:5001/questions/?course_id=${course_id}') : Uri.parse('http://68.178.163.174:5001/questions');
+
 
     Response res = await get(url);
 
@@ -63,16 +60,26 @@ class _SetExamState extends State<SetExam> {
   }
 
   addExam() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? class_id = prefs.getString('class_id');
+    String? teacher_role = prefs.getString('teacher_role');
+    String? subject_id = prefs.getString('subject_id');
+    String? course_id = prefs.getString('course_id');
 
-    final url = Uri.parse('http://68.178.163.174:5001/exam/add');    
-    
-    Map data = {'exam_category': 'blooms', 'chapter_id': chapter};
+    final url = Uri.parse('http://68.178.163.174:5001/exam/school/add');
+
+    Map data = {
+      'exam_category': 'blooms',
+      'class_id': teacher_role == 'Up to HSC' ? class_id : '0',
+      'course_id': teacher_role == 'Undergraduate' ? course_id: '0',
+      'subject_id': teacher_role == 'Up to HSC' ? subject_id : '0'
+    };
     
     Response res = await post(url, body: data);
 
     var resbody = jsonDecode(res.body);
     
-    final url1 = Uri.parse('http://68.178.163.174:5001/exam/blooms/add');
+    final url1 = Uri.parse('http://68.178.163.174:5001/exam/school/blooms/add');
     for(var i in questions){
       if(i[i.keys.toList()[0]][0]['selected'] == true){
         Map data1 = {'stem_id': i.keys.toList()[0].toString(), 'exam_id': resbody[0]['id'].toString()};
@@ -98,7 +105,6 @@ class _SetExamState extends State<SetExam> {
   @override void initState() {
     // TODO: implement initState
     super.initState();
-    getChapters();
     getQuestions();
   }
 
@@ -109,11 +115,7 @@ class _SetExamState extends State<SetExam> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            CustomDropdown(value: chapter, data: chapters,hint: 'Chapter Name', onChanged: (value) {
-              setState(() {
-                chapter = value;
-              });
-            }, fieldNames: ['chapter_name', 'id']),
+
             SizedBox(height: 10,),
             // ElevatedButton(onPressed: () {
             //

@@ -222,7 +222,14 @@ class _LoginState extends State<Login> {
           Response res = await get(url);
           var resbody2 = jsonDecode(res.body);
           print(resbody2);
-          prefs.setString('course_id', resbody2[0]['course_id'].toString());
+          if(resbody2[0]['student_role'] == 'Up to HSC'){
+            prefs.setString('class_id', resbody2[0]['class_id'].toString());
+
+          }else if(resbody2[0]['student_role'] == 'Undergraduate'){
+            prefs.setString('course_id', resbody2[0]['course_id'].toString());
+
+          }
+          prefs.setString('student_role', resbody2[0]['student_role']);
           Navigator.pushNamed(context, '/studentDeshboard');
         }
         if(resbody['role'] == 'Teacher'){
@@ -230,8 +237,14 @@ class _LoginState extends State<Login> {
           Response res = await get(url);
           var resbody2 = jsonDecode(res.body);
           print(resbody2);
-          prefs.setString('course_id', resbody2[0]['course_id'].toString());
+          if(resbody2[0]['teacher_role'] == 'Up to HSC'){
+            prefs.setString('class_id', resbody2[0]['class_id'].toString());
+            prefs.setString('subject_id', resbody2[0]['subject_id'].toString());
+          } else if(resbody2['teacher_role'] == 'Undergraduate'){
+            prefs.setString('course_id', resbody2[0]['course_id'].toString());
 
+          }
+          prefs.setString('teacher_role', resbody2[0]['teacher_role']);
           Navigator.pushNamed(context, '/teacherDeshboard');
         }
       }

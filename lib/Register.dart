@@ -30,10 +30,15 @@ class _RegisterState extends State<Register> {
 
   bool buttonDisabled = false;
 
+  String? cls;
+
 
 List courses = [];
 
+List classes = [];
+
 String? course;
+String? role;
 
   // List roles = [
   //   {'name': 'Student'},
@@ -133,14 +138,26 @@ String? course;
   void studentRegister(user_id) async {
     final url = Uri.parse('http://68.178.163.174:5001/student/add');
 
-    Map data = {'user_id': user_id.toString(), 'course_id': course};
+    Map data = {'user_id': user_id.toString(), 'course_id': course, 'class_id': cls, 'institute': institute.text, 'role': role};
 
-    Response res = await post(url, body: data);
+    Response res = await post(url, body: jsonEncode(data), headers: {
+      "Content-Type": "application/json; charset=utf-8",
+    },);
 
   }
 
-  // void teacherRegister(user_id) async {
-  //   final url = Uri.parse('http://68.178.163.174:5001/teacher/add');
+  void getClasses() async {
+    final url = Uri.parse('http://68.178.163.174:5001/class');
+
+    Response res = await get(url);
+
+    setState(() {
+      classes = jsonDecode(res.body);
+    });
+
+
+  }
+  // void teacherRegister(user_id) async //   final url = Uri.parse('http://68.178.163.174:5001/teacher/add');
   //
   //   Map data = {'user_id': user_id.toString(), 'institute': institute.text};
   //
@@ -331,6 +348,7 @@ String? course;
     // TODO: implement initState
     super.initState();
     getCourses();
+    getClasses();
   }
 
   @override
@@ -349,7 +367,42 @@ String? course;
                   ),
                 ),
               ),
+              CustomDropdown(
+                  hint: 'Role',
+                  value: role, data: [
+                {
+                  'name': 'Up to HSC'
+                },
+                {
+                  'name': 'Undergraduate'
+                },
+                {
+                  'name': 'Professional'
+                }
+              ], onChanged: (value) {
+                setState(() {
+                  role = value;
+                });
+              }, fieldNames: ['name', 'name']),
 
+              if(role == 'Up to HSC')
+              Column(
+                children: [
+                  CustomDropdown(
+                      hint: 'Class Name',
+                      value: cls, data: classes, onChanged: (value) {
+                    setState(() {
+                      cls = value;
+                    });
+                  }, fieldNames: ['class_name', 'id']),
+
+                  CustomTextField(controller: institute, hintText: 'Institute Name', obscureText: false,
+                      textinputtypephone: false),
+                  SizedBox(height: 10,),
+                ],
+              ),
+
+              // SizedBox(height: 20,),
 
               CustomTextField(controller: name, hintText: 'Name', obscureText: false,
                   textinputtypephone: false),
@@ -369,15 +422,15 @@ String? course;
 
               SizedBox(height: 10,),
 
-                CustomDropdown(
-                  hint: 'Select Course',
-                    value: course,
-                    data: courses, onChanged: (value) {
-                  setState(() {
-                    course = value;
-                  });
-                }, fieldNames: ['name', 'id']),
-                SizedBox(height: 10,),
+                // CustomDropdown(
+                //   hint: 'Select Course',
+                //     value: course,
+                //     data: courses, onChanged: (value) {
+                //   setState(() {
+                //     course = value;
+                //   });
+                // }, fieldNames: ['name', 'id']),
+                // SizedBox(height: 10,),
 
 
 
