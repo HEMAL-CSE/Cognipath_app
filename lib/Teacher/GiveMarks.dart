@@ -5,6 +5,7 @@ import 'package:cognipath/components/CustomDropdown.dart';
 import 'package:cognipath/components/CustomTextField.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,8 +18,7 @@ class GiveMarks extends StatefulWidget {
 
 class _GiveMarksState extends State<GiveMarks> {
 
-  String? chapter;
-  List chapters = [];
+
   List questions = [];
   List students = [];
 
@@ -28,25 +28,18 @@ class _GiveMarksState extends State<GiveMarks> {
     {'name':'blooms'}, {'name':'mcq'}
   ];
 
-  getChapters() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? course_id = await prefs.getString('course_id');
 
-    final url = Uri.parse('http://68.178.163.174:5001/chapter/?course_id=${course_id}');
-
-    Response res = await get(url);
-
-    setState(() {
-      chapters = jsonDecode(res.body);
-    });
-  }
 
   getStudents() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? course_id = await prefs.getString('course_id');
+    String? class_id = prefs.getString('class_id');
+    String? teacher_role = prefs.getString('teacher_role');
+    String? subject_id = prefs.getString('subject_id');
+    String? course_id = prefs.getString('course_id');
 
+      var courseorclassid = teacher_role == 'Up to HSC' ? 'class_id=${class_id}&subject_id=${subject_id}' : teacher_role == 'Undergraduate' ? 'course_id=${course_id}' : '';
 
-      final url = Uri.parse('http://68.178.163.174:5001/exam/${category}/answers?chapter_id=${chapter}');
+      final url = Uri.parse('http://68.178.163.174:5001/exam/school/blooms/answers?${courseorclassid}');
 
       Response res = await get(url);
       print(url);
@@ -77,22 +70,30 @@ class _GiveMarksState extends State<GiveMarks> {
   }
 
   addMarks() async {
-    if(category == 'blooms'){
 
       // Map data = {'exam_id': };
       for(var i in students){
         for(var k in i[i.keys.toList()[0]]){
-          final url = Uri.parse('http://68.178.163.174:5001/exam/blooms/marks/add?id=${k['answer_id']}');
+          print(k);
+          final url = Uri.parse('http://68.178.163.174:5001/exam/school/blooms/marks/add?id=${k['answer_id']}');
           Map data = {'marks': k['given_marks'].text};
           if(k['given_marks'].text != ''){
             Response res = await put(url, body: data);
           }
         }
       }
+      Fluttertoast.showToast(
+          msg: "Submitted",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0
+
+      );
 
 
-
-    }
   }
 
 
@@ -131,8 +132,7 @@ class _GiveMarksState extends State<GiveMarks> {
   @override void initState() {
     // TODO: implement initState
     super.initState();
-    getChapters();
-    // getStudents();
+    getStudents();
   }
   @override
   Widget build(BuildContext context) {
@@ -141,20 +141,8 @@ class _GiveMarksState extends State<GiveMarks> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            CustomDropdown(value: chapter, data: chapters,hint: 'Chapter Name', onChanged: (value) {
-              setState(() {
-                chapter = value;
-              });
-            }, fieldNames: ['chapter_name', 'id']),
-            CustomDropdown(value: category, data: categories,hint: 'Select Question Category', onChanged: (value) {
-              setState(() {
-                category = value;
-              });
-            }, fieldNames: ['name', 'name']),
 
-            ElevatedButton(onPressed: () {
-                getStudents();
-            }, child: Text('Search')),
+
 
             SizedBox(height: 20,),
 

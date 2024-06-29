@@ -4,6 +4,7 @@ import 'package:cognipath/components/CustomAppBar.dart';
 import 'package:cognipath/components/CustomDropdown.dart';
 import 'package:cognipath/components/CustomTextField.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -15,30 +16,36 @@ class GiveExamBlooms extends StatefulWidget {
 }
 
 class _GiveExamBloomsState extends State<GiveExamBlooms> {
-  List chapters = [];
-  String? chapter;
+  List subjects = [];
+  String? subject;
   List questions = [];
   var existingAnswers = {};
 
-  getChapters() async {
+  getSubjects() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? course_id = await prefs.getString('course_id');
+    String? class_id = await prefs.getString('class_id');
 
-    final url = Uri.parse('http://68.178.163.174:5001/chapter/?course_id=${course_id}');
+    final url = Uri.parse('http://68.178.163.174:5001/class/subject?class_id=${class_id}');
 
     Response res = await get(url);
 
     setState(() {
-      chapters = jsonDecode(res.body);
+      subjects = jsonDecode(res.body);
     });
   }
 
   getQuestions() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? user_id = prefs.getString('user_id');
+    String? class_id = prefs.getString('class_id');
+    String? student_role = prefs.getString('student_role');
+    String? course_id = prefs.getString('course_id');
 
+    var courseorclassid = student_role == 'Up to HSC' ? 'subject_id=${subject}' : student_role == 'Undergraduate' ? 'course_id=${course_id}' : '';
 
-      final url = Uri.parse('http://68.178.163.174:5001/exam/blooms/?chapter_id=${chapter}');
+  print(courseorclassid);
+
+    final url = Uri.parse('http://68.178.163.174:5001/exam/school/blooms/?${courseorclassid}');
 
       Response res = await get(url);
       print(url);
@@ -48,7 +55,7 @@ class _GiveExamBloomsState extends State<GiveExamBlooms> {
       var resbody = jsonDecode(res.body);
 
       for(var i in resbody){
-        final url2 = Uri.parse('http://68.178.163.174:5001/exam/blooms/answers?chapter_id=${chapter}&student_id=${user_id}&ques_id=${i['ques_id']}&exam_id=${i['exam_id']}');
+        final url2 = Uri.parse('http://68.178.163.174:5001/exam/school/blooms/answers?${courseorclassid}&student_id=${user_id}&ques_id=${i['ques_id']}&exam_id=${i['exam_id']}');
         Response res = await get(url2);
         print(jsonDecode(res.body));
         var resbody2 = jsonDecode(res.body);
@@ -90,7 +97,7 @@ class _GiveExamBloomsState extends State<GiveExamBlooms> {
   addAnswers() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? user_id = prefs.getString('user_id');
-    final url = Uri.parse('http://68.178.163.174:5001/exam/blooms/answers/add');
+    final url = Uri.parse('http://68.178.163.174:5001/exam/school/blooms/answers/add');
 
     for(var i in questions){
       for(var j in i[i.keys.toList()[0]]){
@@ -99,13 +106,24 @@ class _GiveExamBloomsState extends State<GiveExamBlooms> {
           Response res = await post(url, body: data);
           print(res.statusCode);
         }else if(j['answer'].text != '' && existingAnswers.containsKey(j['ques_id']) == true){
-          final url = Uri.parse('http://68.178.163.174:5001/exam/blooms/answers/update?id=${existingAnswers[j['ques_id']]['answer_id']}');
+          final url = Uri.parse('http://68.178.163.174:5001/exam/school/blooms/answers/update?id=${existingAnswers[j['ques_id']]['answer_id']}');
           Map data = { 'answer': j['answer'].text};
           Response res = await put(url, body: data);
           print(res.statusCode);
         }
       }
     }
+
+    Fluttertoast.showToast(
+        msg: "Submitted",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 16.0
+
+    );
 
   }
 
@@ -114,7 +132,7 @@ class _GiveExamBloomsState extends State<GiveExamBlooms> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getChapters();
+    getSubjects();
 
   }
 
@@ -138,11 +156,11 @@ class _GiveExamBloomsState extends State<GiveExamBlooms> {
               ),
             ),
           )),
-          CustomDropdown(value: chapter, data: chapters,hint: 'Chapter Name', onChanged: (value) {
+          CustomDropdown(value: subject, data: subjects,hint: 'Subject Name', onChanged: (value) {
             setState(() {
-              chapter = value;
+              subject = value;
             });
-          }, fieldNames: ['chapter_name', 'id']),
+          }, fieldNames: ['name', 'id']),
 
           SizedBox(height: 10,),
           ElevatedButton(onPressed: () {

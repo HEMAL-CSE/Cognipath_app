@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -31,17 +30,22 @@ class _RegisterState extends State<Register> {
 
   bool buttonDisabled = false;
 
+  String? cls;
+
+
+List courses = [];
 
 List classes = [];
 
-String? cls;
+String? course;
+String? role;
 
-  List roles = [
-    {'name': 'Student'},
-    {'name': 'Teacher'},
-  ];
+  // List roles = [
+  //   {'name': 'Student'},
+  //   {'name': 'Teacher'},
+  // ];
 
-  String? role;
+  // String? role;
 
 
   TextEditingController phone_number = TextEditingController();
@@ -49,11 +53,6 @@ String? cls;
 
   bool showOTP = false;
   var receivedID = '';
-
-
-   final FirebaseAuth auth = FirebaseAuth.instance;
-
-
 
 
    // late GoogleMapController mapController;
@@ -139,66 +138,11 @@ String? cls;
   void studentRegister(user_id) async {
     final url = Uri.parse('http://68.178.163.174:5001/student/add');
 
-    Map data = {'user_id': user_id.toString(), 'cls': cls, 'institute': institute.text};
+    Map data = {'user_id': user_id.toString(), 'course_id': course, 'class_id': cls, 'institute': institute.text, 'role': role};
 
-    Response res = await post(url, body: data);
-
-  }
-
-  void teacherRegister(user_id) async {
-    final url = Uri.parse('http://68.178.163.174:5001/teacher/add');
-
-    Map data = {'user_id': user_id.toString(), 'institute': institute.text};
-
-    Response res = await post(url, body: data);
-
-  }
-
-
-  void verifyUserPhoneNumber() async {
-    setState(() {
-      buttonDisabled = true;
-    });
-
-    Response res = await get(Uri.parse('http://68.178.163.174:5001/user/check_phone_number?phone_number=${phone_number.text}&role=${role}'));
-    if(res.statusCode == 201){
-      var json = jsonDecode(res.body);
-      if(json['checked'] == 0){
-        Fluttertoast.showToast(
-            msg: "User already exists",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.green,
-            textColor: Colors.white,
-            fontSize: 16.0
-
-        );
-      }else if(json['checked'] == 1){
-        auth.verifyPhoneNumber(
-          phoneNumber: '+88' + phone_number.text,
-          verificationCompleted: (PhoneAuthCredential credential) async {
-            await auth.signInWithCredential(credential).then(
-                  (value) => print('Logged In Successfully'),
-            );
-          },
-
-          verificationFailed: (FirebaseAuthException e) {
-            print(e.message);
-          },
-          codeSent: (String verificationId, int? resendToken) async {
-
-            receivedID = verificationId;
-            showOTP = true;
-            buttonDisabled = false;
-            setState(() {});
-          },
-          codeAutoRetrievalTimeout: (String verificationId) {
-            print('TimeOut');
-          },
-        );
-      }
-    }
+    Response res = await post(url, body: jsonEncode(data), headers: {
+      "Content-Type": "application/json; charset=utf-8",
+    },);
 
   }
 
@@ -210,25 +154,101 @@ String? cls;
     setState(() {
       classes = jsonDecode(res.body);
     });
+
+
+  }
+  // void teacherRegister(user_id) async //   final url = Uri.parse('http://68.178.163.174:5001/teacher/add');
+  //
+  //   Map data = {'user_id': user_id.toString(), 'institute': institute.text};
+  //
+  //   Response res = await post(url, body: data);
+  //
+  // }
+
+
+  // void verifyUserPhoneNumber() async {
+  //   setState(() {
+  //     buttonDisabled = true;
+  //   });
+  //
+  //   try{
+  //     Response res = await get(Uri.parse(
+  //         'http://68.178.163.174:5001/user/check_phone_number?phone_number=${phone_number.text}'));
+  //     if (res.statusCode == 201) {
+  //       var json = jsonDecode(res.body);
+  //       if (json['checked'] == 0) {
+  //         Fluttertoast.showToast(
+  //             msg: "User already exists",
+  //             toastLength: Toast.LENGTH_SHORT,
+  //             gravity: ToastGravity.CENTER,
+  //             timeInSecForIosWeb: 1,
+  //             backgroundColor: Colors.green,
+  //             textColor: Colors.white,
+  //             fontSize: 16.0);
+  //       } else if (json['checked'] == 1) {
+  //         auth.verifyPhoneNumber(
+  //           phoneNumber: '+88' + phone_number.text,
+  //           verificationCompleted: (PhoneAuthCredential credential) async {
+  //             await auth.signInWithCredential(credential).then(
+  //                   (value) => print('Logged In Successfully'),
+  //                 );
+  //           },
+  //           verificationFailed: (FirebaseAuthException e) {
+  //             print(e.message);
+  //           },
+  //           codeSent: (String verificationId, int? resendToken) async {
+  //             receivedID = verificationId;
+  //             showOTP = true;
+  //             buttonDisabled = false;
+  //             setState(() {});
+  //           },
+  //           codeAutoRetrievalTimeout: (String verificationId) {
+  //             print('TimeOut');
+  //           },
+  //         );
+  //       }
+  //       setState(() {
+  //         buttonDisabled = false;
+  //       });
+  //     }
+  //   }catch(err) {
+  //     Fluttertoast.showToast(
+  //         msg: "${err}",
+  //         toastLength: Toast.LENGTH_SHORT,
+  //         gravity: ToastGravity.CENTER,
+  //         timeInSecForIosWeb: 1,
+  //         backgroundColor: Colors.green,
+  //         textColor: Colors.white,
+  //         fontSize: 16.0);
+  //     setState(() {
+  //       buttonDisabled = false;
+  //     });
+  //   }
+  // }
+
+  void getCourses() async {
+    final url = Uri.parse('http://68.178.163.174:5001/course');
+
+    Response res = await get(url);
+
+
+    setState(() {
+      courses = jsonDecode(res.body);
+    });
   }
 
 
 
 
-  Future<void> verifyOTPCode() async {
+  Future<void> sigup() async {
     setState(() {
       buttonDisabled = true;
     });
-    PhoneAuthCredential credential = PhoneAuthProvider.credential(
-      verificationId: receivedID,
-      smsCode: otp.text,
-    );
-    await auth
-        .signInWithCredential(credential)
-        .then((value) async {
+
+
       final url = Uri.parse('http://68.178.163.174:5001/user/register');
 
-  Map data = {'name': name.text, 'email': email.text, 'mobile': phone_number.text, 'password': password.text, 'role': role};
+  Map data = {'name': name.text, 'email': email.text, 'mobile': phone_number.text, 'password': password.text, 'role': 'Student'};
 
       Response res = await post(url, body: data);
 
@@ -245,12 +265,7 @@ String? cls;
             fontSize: 16.0
 
         );
-        if(role == 'Student'){
           studentRegister(resbody['user_id']);
-        }
-        if(role == 'Teacher'){
-          teacherRegister(resbody['user_id']);
-        }
         Navigator.pushNamed(context, '/');
       }
 
@@ -270,7 +285,7 @@ String? cls;
       setState(() {
         buttonDisabled = false;
       });
-    });
+
   }
 
 
@@ -332,6 +347,7 @@ String? cls;
   @override void initState() {
     // TODO: implement initState
     super.initState();
+    getCourses();
     getClasses();
   }
 
@@ -351,20 +367,42 @@ String? cls;
                   ),
                 ),
               ),
-
-
-
               CustomDropdown(
-                  value: role,
-                  data: roles,
-                  hint: 'Select',
-                  onChanged: (value) {
+                  hint: 'Role',
+                  value: role, data: [
+                {
+                  'name': 'Up to HSC'
+                },
+                {
+                  'name': 'Undergraduate'
+                },
+                {
+                  'name': 'Professional'
+                }
+              ], onChanged: (value) {
+                setState(() {
+                  role = value;
+                });
+              }, fieldNames: ['name', 'name']),
 
+              if(role == 'Up to HSC')
+              Column(
+                children: [
+                  CustomDropdown(
+                      hint: 'Class Name',
+                      value: cls, data: classes, onChanged: (value) {
                     setState(() {
-                      role = value;
+                      cls = value;
                     });
-                  },
-                  fieldNames: ['name', 'name']),
+                  }, fieldNames: ['class_name', 'id']),
+
+                  CustomTextField(controller: institute, hintText: 'Institute Name', obscureText: false,
+                      textinputtypephone: false),
+                  SizedBox(height: 10,),
+                ],
+              ),
+
+              // SizedBox(height: 20,),
 
               CustomTextField(controller: name, hintText: 'Name', obscureText: false,
                   textinputtypephone: false),
@@ -380,27 +418,19 @@ String? cls;
               CustomTextField(controller: password, hintText: 'Password', obscureText: true,
                   textinputtypephone: false),
 
-              SizedBox(height: 10,),
 
-              CustomTextField(controller: institute, hintText: 'Institute', obscureText: false,
-                  textinputtypephone: false),
 
               SizedBox(height: 10,),
 
-              if(role == 'Student')
-                Column(
-                  children: [
-                    CustomDropdown(
-                      hint: 'Select CLass',
-                        value: cls,
-                        data: classes, onChanged: (value) {
-                      setState(() {
-                        cls = value;
-                      });
-                    }, fieldNames: ['class_name', 'id']),
-                    SizedBox(height: 10,),
-                  ],
-                ),
+                // CustomDropdown(
+                //   hint: 'Select Course',
+                //     value: course,
+                //     data: courses, onChanged: (value) {
+                //   setState(() {
+                //     course = value;
+                //   });
+                // }, fieldNames: ['name', 'id']),
+                // SizedBox(height: 10,),
 
 
 
@@ -409,18 +439,14 @@ String? cls;
 
               SizedBox(height: 10,),
 
-              if(showOTP)
-                CustomTextField(controller: otp, hintText: 'OTP', obscureText: true,
-                    textinputtypephone: true),
+              // if(showOTP)
+              //   CustomTextField(controller: otp, hintText: 'OTP', obscureText: true,
+              //       textinputtypephone: true),
 
               Container( padding: EdgeInsets.all(10),
                 margin: EdgeInsets.all(04),
                 child: ElevatedButton(onPressed: buttonDisabled ? null : (){
-                  if(showOTP){
-                    verifyOTPCode();
-                  } else{
-                    verifyUserPhoneNumber();
-                  }
+                  sigup();
                 }, child: const Text("Sign Up")),
               ),
 

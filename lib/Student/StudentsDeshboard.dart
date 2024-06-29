@@ -68,7 +68,7 @@ class _StudentDeshboardState extends State<StudentDeshboard> {
 
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, '/studentpage');
+                      Navigator.pushNamed(context, '/giveExamblooms');
                     },
                     child: Card(
                       color: Color(0xff01013f),
@@ -171,18 +171,26 @@ class _StudentDeshboardState extends State<StudentDeshboard> {
                     ),
                   ),
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(09.0),
-                        child: Text('Powered By', style: TextStyle(),),
-                      ),
-                      Image.asset('assets/logo.jfif', width: 90),
 
-                    ],
-                  )
+
+
+
+                ],
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: SizedBox(height: 150,),
+            ),
+            SliverToBoxAdapter(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(09.0),
+                    child: Text('Powered By', style: TextStyle(),),
+                  ),
+                  Image.asset('assets/logo.jfif', width: 90),
 
                 ],
               ),

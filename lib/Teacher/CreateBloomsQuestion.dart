@@ -18,8 +18,8 @@ class CreateBloomsQuestion extends StatefulWidget {
 }
 
 class _CreateBloomsQuestionState extends State<CreateBloomsQuestion> {
-  String? chapter;
-  List chapters = [];
+  // String? chapter;
+  // List chapters = [];
   List blooms = [];
   List questions = [];
 
@@ -38,18 +38,7 @@ class _CreateBloomsQuestionState extends State<CreateBloomsQuestion> {
     return String.fromCharCode(c.codeUnitAt(0) + 1);
   }
 
-  getChapters() async {
-     SharedPreferences prefs = await SharedPreferences.getInstance();
-     String? course_id = await prefs.getString('course_id');
 
-    final url = Uri.parse('http://68.178.163.174:5001/chapter/?course_id=${course_id}');
-
-    Response res = await get(url);
-
-    setState(() {
-      chapters = jsonDecode(res.body);
-    });
-  }
   
   getDomains() async {
      final url = Uri.parse('http://68.178.163.174:5001/questions/cognitive_domains');
@@ -62,7 +51,14 @@ class _CreateBloomsQuestionState extends State<CreateBloomsQuestion> {
   }
 
   getQuestions() async {
-     final url = Uri.parse('http://68.178.163.174:5001/questions');
+
+     SharedPreferences prefs = await SharedPreferences.getInstance();
+     String? class_id = prefs.getString('class_id');
+     String? teacher_role = prefs.getString('teacher_role');
+     String? subject_id = prefs.getString('subject_id');
+     String? course_id = prefs.getString('course_id');
+
+     final url = teacher_role == 'Up to HSC' ?  Uri.parse('http://68.178.163.174:5001/questions/school?class_id=${class_id}&subject_id=${subject_id}') : teacher_role == 'Undergraduate' ? Uri.parse('http://68.178.163.174:5001/questions/?course_id=${course_id}') : Uri.parse('http://68.178.163.174:5001/questions');
 
      Response res = await get(url);
 
@@ -94,19 +90,32 @@ class _CreateBloomsQuestionState extends State<CreateBloomsQuestion> {
   }
 
   addQues() async {
-     final url = Uri.parse('http://68.178.163.174:5001/questions/add/stem');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? class_id = prefs.getString('class_id');
+    String? teacher_role = prefs.getString('teacher_role');
+    String? subject_id = prefs.getString('subject_id');
+    String? course_id = prefs.getString('course_id');
 
-     Map data = {'stem':question.text,'chapter_id': chapter};
+     final url = Uri.parse('http://68.178.163.174:5001/questions/school/add/stem');
+
+     Map data = {
+       'stem':question.text,
+       'class_id': teacher_role == 'Up to HSC' ? class_id : '0',
+       'course_id': teacher_role == 'Undergraduate' ? course_id: '0',
+       'subject_id': teacher_role == 'Up to HSC' ? subject_id : '0'
+     };
 
      Response res = await post(url, body: data);
+
 
      var resbody = jsonDecode(res.body);
      print(resbody);
 
      for(var i in questionOptions){
-       final url2 = Uri.parse('http://68.178.163.174:5001/questions/add/ques');
+       final url2 = Uri.parse('http://68.178.163.174:5001/questions/school/add/ques');
        Map data2 = {'marks': i['marks'].text,'description':i['ques'].text,'stem_id': resbody[0]['id'].toString(), 'ques_point': i['option'],  'domain_id': i['blooms'].toString(), };
        Response res2 = await post(url2, body: data2);
+       print(res2);
 
      }
 
@@ -130,7 +139,6 @@ class _CreateBloomsQuestionState extends State<CreateBloomsQuestion> {
   @override void initState() {
     // TODO: implement initState
     super.initState();
-    getChapters();
     getDomains();
     getQuestions();
   }
@@ -143,11 +151,7 @@ class _CreateBloomsQuestionState extends State<CreateBloomsQuestion> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            CustomDropdown(value: chapter, data: chapters,hint: 'Chapter Name', onChanged: (value) {
-              setState(() {
-                chapter = value;
-              });
-            }, fieldNames: ['chapter_name', 'id']),
+
             SizedBox(height: 10,),
             Align(
                 alignment: Alignment.topLeft,

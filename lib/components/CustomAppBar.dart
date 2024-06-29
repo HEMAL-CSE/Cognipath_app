@@ -1,5 +1,7 @@
+import 'package:cognipath/Login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:cognipath/pages/Login.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,12 +18,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
 
-    // void logout()async {
-    //   SharedPreferences prefs = await SharedPreferences.getInstance();
-    //   prefs.remove('role');
-    //   prefs.remove('user_id');
-    //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login()));
-    // }
+    void logout()async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.remove('role');
+      prefs.remove('user_id');
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login()));
+    }
 
     return AppBar(
       backgroundColor: Color(0xff01013f),
@@ -36,7 +38,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         GestureDetector(
           onTap: () {
-            // logout();
+            logout();
           },
           child: Padding(
             padding: const EdgeInsets.all(10.0),
