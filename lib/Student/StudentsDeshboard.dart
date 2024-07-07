@@ -139,6 +139,9 @@ class _StudentDeshboardState extends State<StudentDeshboard> {
                   ),
 
                   GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/career_path');
+                    },
                     child: Card(
                       color: Color(0xff01013f),
                       elevation: 5,

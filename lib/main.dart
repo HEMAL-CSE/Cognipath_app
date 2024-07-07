@@ -1,6 +1,7 @@
 import 'package:cognipath/Home.dart';
 import 'package:cognipath/Login.dart';
 import 'package:cognipath/Register.dart';
+import 'package:cognipath/StudentPages/CareerPath.dart';
 import 'package:cognipath/StudentPages/CheckMarks.dart';
 import 'package:cognipath/StudentPages/GiveExamBlooms.dart';
 import 'package:cognipath/StudentPages/GiveExamMCQ.dart';
@@ -50,6 +51,7 @@ class MyApp extends StatelessWidget {
 
         '/give_marks': (context) => GiveMarks(),
         '/checkmarks': (context) => CheckMarks(),
+        '/career_path': (context) => CareerPath(),
 
       },
 
