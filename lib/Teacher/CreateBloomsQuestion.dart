@@ -31,6 +31,7 @@ class _CreateBloomsQuestionState extends State<CreateBloomsQuestion> {
       'ques': TextEditingController(),
       'blooms': null,
       'marks': TextEditingController(),
+      'correct_answer': TextEditingController(),
     }
   ];
 
@@ -179,6 +180,9 @@ class _CreateBloomsQuestionState extends State<CreateBloomsQuestion> {
                           ],
                         ),
 
+                        SizedBox(height: 10,),
+
+                        Container(width: 300,child: CustomTextField(maxLines: 5, controller: i['correct_answer'], hintText: 'Correct Answer', obscureText: false, textinputtypephone: false)),
 
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -225,7 +229,7 @@ class _CreateBloomsQuestionState extends State<CreateBloomsQuestion> {
               child: GestureDetector(
                 onTap: () {
                   setState(() {
-                    questionOptions.add({'option': '${nextChar('${questionOptions.last['option']}')}', 'ques': TextEditingController(), 'blooms': null, 'marks': TextEditingController()});
+                    questionOptions.add({'option': '${nextChar('${questionOptions.last['option']}')}', 'ques': TextEditingController(), 'blooms': null, 'marks': TextEditingController(), 'correct_answer': TextEditingController()});
                   });
                 },
                 child: Container(
