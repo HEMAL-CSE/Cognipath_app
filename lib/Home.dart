@@ -17,9 +17,9 @@ class _HomeState extends State<Home> {
   final PageController controller = PageController();
 
   List<String> images = [
-    "assets/cog1.jfif",
-    "assets/cog2.jpg",
     "assets/cog3.jfif",
+    "assets/cog2.jpg",
+    "assets/cog1.jfif",
     "assets/cog4.jfif",
     // "assets/banner4.jpg",
 
@@ -224,7 +224,6 @@ class _HomeState extends State<Home> {
           )
 
         ],
-
 
       ),
 
