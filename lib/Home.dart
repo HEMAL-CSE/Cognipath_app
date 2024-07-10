@@ -17,9 +17,11 @@ class _HomeState extends State<Home> {
   final PageController controller = PageController();
 
   List<String> images = [
-    "https://www.shutterstock.com/shutterstock/photos/71149642/display_1500/stock-photo-image-of-confident-businessman-with-briefcase-walking-upstairs-71149642.jpg",
-    "https://www.shutterstock.com/shutterstock/photos/79637527/display_1500/stock-vector-graduation-cap-and-diploma-vector-79637527.jpg",
-    "https://www.shutterstock.com/shutterstock/photos/559568407/display_1500/stock-photo-academic-college-degree-education-insight-concept-559568407.jpg",
+    "assets/cog1.jfif",
+    "assets/cog2.jpg",
+    "assets/cog3.jfif",
+    "assets/cog4.jfif",
+    // "assets/banner4.jpg",
 
   ];
 
@@ -75,7 +77,7 @@ class _HomeState extends State<Home> {
                   child: SizedBox(
                     height: 300,
                     width: double.infinity,
-                    child: Image.network(
+                    child: Image.asset(
                       images[index % images.length],
                       fit: BoxFit.cover,
                     ),

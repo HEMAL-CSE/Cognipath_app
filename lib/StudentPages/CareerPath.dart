@@ -50,6 +50,7 @@ class _CareerPathState extends State<CareerPath> {
     // totalMarks['Analyzing'] = totalMarks['Stdent ID'].toString();
     // totalMarks['Evaluation'] = totalMarks['Stdent ID'].toString();
     // totalMarks['Creating'] = totalMarks['Stdent ID'].toString();
+    // In heree we update in our dates.
 
 
     // List result = resbody
@@ -117,9 +118,13 @@ class _CareerPathState extends State<CareerPath> {
     return Scaffold(
       appBar: CustomAppBar(title: 'Career Path',),
       body: SingleChildScrollView(
+
         child: Column(
           children: [
-
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text('Suggested Career Path:', style: TextStyle(fontSize: 19.5, fontWeight: FontWeight.bold),),
+          ),
             SfCartesianChart(
                 primaryXAxis: CategoryAxis(),
                 primaryYAxis: NumericAxis(minimum: 0, maximum: 100, interval: 10),
