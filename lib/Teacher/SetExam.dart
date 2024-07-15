@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:cognipath/components/CustomAppBar.dart';
 import 'package:cognipath/components/CustomDropdown.dart';
+import 'package:cognipath/components/CustomTextField.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
@@ -15,6 +17,10 @@ class SetExam extends StatefulWidget {
 }
 
 class _SetExamState extends State<SetExam> {
+
+  TextEditingController exam_name = TextEditingController();
+
+
 
 
   List questions = [];
@@ -72,7 +78,8 @@ class _SetExamState extends State<SetExam> {
       'exam_category': 'blooms',
       'class_id': teacher_role == 'Up to HSC' ? class_id : '0',
       'course_id': teacher_role == 'Undergraduate' ? course_id: '0',
-      'subject_id': teacher_role == 'Up to HSC' ? subject_id : '0'
+      'subject_id': teacher_role == 'Up to HSC' ? subject_id : '0',
+      'exam_name': exam_name.text
     };
     
     Response res = await post(url, body: data);
@@ -117,10 +124,8 @@ class _SetExamState extends State<SetExam> {
           children: [
 
             SizedBox(height: 10,),
-            // ElevatedButton(onPressed: () {
-            //
-            // },
-            // child: Text('Search')),
+
+            CustomTextField(controller: exam_name, hintText: 'Exam Name', obscureText: false, textinputtypephone: false),
 
             SizedBox(height: 20,),
 
@@ -173,7 +178,21 @@ class _SetExamState extends State<SetExam> {
 
             SizedBox(height: 10,),
             ElevatedButton(onPressed: () {
-              addExam();
+              if(exam_name.text.isEmpty == true){
+                Fluttertoast.showToast(
+                    msg: "Please give exam name",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.green,
+                    textColor: Colors.white,
+                    fontSize: 16.0
+
+                );
+              }else {
+                addExam();
+
+              }
             }, child: Text('Submit'))
           ],
         ),

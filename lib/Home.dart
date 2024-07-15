@@ -59,173 +59,175 @@ class _HomeState extends State<Home> {
         ),
       ),
 
-      body: Column(
-        children: [
-          SizedBox(height: 14,),
-          SizedBox(height: 200,
-            width: double.infinity,
-            child: PageView.builder(
-              controller: controller,
-              onPageChanged: (index) {
-                setState(() {
-                  currentIndex = index % images.length;
-                });
-              },
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: SizedBox(
-                    height: 300,
-                    width: double.infinity,
-                    child: Image.asset(
-                      images[index % images.length],
-                      fit: BoxFit.cover,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(height: 14,),
+            SizedBox(height: 200,
+              width: double.infinity,
+              child: PageView.builder(
+                controller: controller,
+                onPageChanged: (index) {
+                  setState(() {
+                    currentIndex = index % images.length;
+                  });
+                },
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: SizedBox(
+                      height: 300,
+                      width: double.infinity,
+                      child: Image.asset(
+                        images[index % images.length],
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              for (var i = 0; i < images.length; i++)
-                buildIndicator(currentIndex == i)
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                IconButton(
-                  onPressed: () {
-                    controller.jumpToPage(currentIndex - 1);
-                  },
-                  icon: Icon(Icons.arrow_back),
-                ),
-                IconButton(
-                  onPressed: () {
-                    controller.jumpToPage(currentIndex + 1);
-                  },
-                  icon: Icon(Icons.arrow_forward),
-                ),
+                for (var i = 0; i < images.length; i++)
+                  buildIndicator(currentIndex == i)
               ],
             ),
-          ),
-
-          GestureDetector(
-            onTap: () async {
-              // Navigator.pushNamed(context, '/addbreedingdata');
-              SharedPreferences prefs = await SharedPreferences.getInstance();
-              String? role = await prefs.getString('role');
-              print(role);
-              if(role == 'Student'){
-                Navigator.pushNamed(context, '/studentDeshboard');
-              }else{
-                Navigator.pushNamed(context, '/');
-
-              }
-            },
-            child: Card(
-              color: Color(0xff01013f),
-              elevation: 5,
-              margin: EdgeInsets.all(8),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      controller.jumpToPage(currentIndex - 1);
+                    },
+                    icon: Icon(Icons.arrow_back),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      controller.jumpToPage(currentIndex + 1);
+                    },
+                    icon: Icon(Icons.arrow_forward),
+                  ),
+                ],
               ),
-              child: Container(
-                height: 150,
-                width: 150,
-                child: Center(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('Student Login',textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white),),
-                      SizedBox(height: 10,),
-                      Container(
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.5),
-                              borderRadius: BorderRadius.circular(8)
-                          ),
-                          child: Icon(SimpleLineIcons.people, color: Colors.white,)
-                      )
-                    ],
+            ),
+        
+            GestureDetector(
+              onTap: () async {
+                // Navigator.pushNamed(context, '/addbreedingdata');
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                String? role = await prefs.getString('role');
+                print(role);
+                if(role == 'Student'){
+                  Navigator.pushNamed(context, '/studentDeshboard');
+                }else{
+                  Navigator.pushNamed(context, '/');
+        
+                }
+              },
+              child: Card(
+                color: Color(0xff01013f),
+                elevation: 5,
+                margin: EdgeInsets.all(8),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Container(
+                  height: 150,
+                  width: 150,
+                  child: Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [ 
+                        Text('Student Login',textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white),),
+                        SizedBox(height: 10,),
+                        Container(
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.5),
+                                borderRadius: BorderRadius.circular(8)
+                            ),
+                            child: Icon(SimpleLineIcons.people, color: Colors.white,)
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-
-          SizedBox(height: 04,),
-
-          GestureDetector(
-            onTap: () async {
-              // Navigator.pushNamed(context, '/addbreedingdata');
-              SharedPreferences prefs = await SharedPreferences.getInstance();
-              String? role = await prefs.getString('role');
-              if(role == 'Teacher'){
-                Navigator.pushNamed(context, '/teacherDeshboard');
-              }else{
-                Navigator.pushNamed(context, '/');
-
-              }
-            },
-            child: Card(
-              color: Color(0xff01013f),
-              elevation: 5,
-              margin: EdgeInsets.all(8),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: Container(
-                height: 150,
-                width: 150,
-                child: Center(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('Teacher Login',textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17,color: Colors.white),),
-                      SizedBox(height: 10,),
-                      Container(
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.5),
-                              borderRadius: BorderRadius.circular(8)
-                          ),
-                          child: Icon(FontAwesome5Solid.chalkboard_teacher, color: Colors.white,)
-                      )
-                    ],
+        
+            SizedBox(height: 04,),
+        
+            GestureDetector(
+              onTap: () async {
+                // Navigator.pushNamed(context, '/addbreedingdata');
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                String? role = await prefs.getString('role');
+                if(role == 'Teacher'){
+                  Navigator.pushNamed(context, '/teacherDeshboard');
+                }else{
+                  Navigator.pushNamed(context, '/');
+        
+                }
+              },
+              child: Card(
+                color: Color(0xff01013f),
+                elevation: 5,
+                margin: EdgeInsets.all(8),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Container(
+                  height: 150,
+                  width: 150,
+                  child: Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Teacher Login',textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17,color: Colors.white),),
+                        SizedBox(height: 10,),
+                        Container(
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.5),
+                                borderRadius: BorderRadius.circular(8)
+                            ),
+                            child: Icon(FontAwesome5Solid.chalkboard_teacher, color: Colors.white,)
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-
-          SizedBox(height: 14,),
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(09.0),
-                child: Text('Powered By', style: TextStyle(),),
-              ),
-              Image.asset('assets/logo.jfif', width: 92),
-
-            ],
-          )
-
-        ],
-
-
+        
+            SizedBox(height: 14,),
+        
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(09.0),
+                  child: Text('Powered By', style: TextStyle(),),
+                ),
+                Image.asset('assets/logo.jfif', width: 92),
+        
+              ],
+            )
+        
+          ],
+        
+        
+        ),
       ),
 
     );
