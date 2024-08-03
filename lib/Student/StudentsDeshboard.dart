@@ -49,7 +49,7 @@ class _StudentDeshboardState extends State<StudentDeshboard> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text('Online Learning',textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),),
+                              Text('Online Learning',textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)),
                               SizedBox(height: 10,),
                               Container(
                                   padding: EdgeInsets.all(10),
@@ -121,7 +121,7 @@ class _StudentDeshboardState extends State<StudentDeshboard> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text('Check Marks', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),),
+                              Text('Check Marks', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.white), textAlign: TextAlign.center,),
                               SizedBox(height: 10,),
                               Container(
                                   padding: EdgeInsets.all(10),
