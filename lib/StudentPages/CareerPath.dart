@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:cognipath/components/CustomAppBar.dart';
+import 'package:cognipath/components/CustomDropdown.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,6 +17,16 @@ class CareerPath extends StatefulWidget {
 
 class _CareerPathState extends State<CareerPath> {
    List data = [];
+   
+   List sectors = [];
+
+   List careers = [];
+
+   String? sector_id;
+
+   bool suggestion = false;
+   
+   
   late TooltipBehavior _tooltip;
    Map totalMarks = {
      "Stdent ID": 0,
@@ -25,6 +37,16 @@ class _CareerPathState extends State<CareerPath> {
      "Evaluation": 0,
      "Creating": 0
    };
+   
+   void getSectors() async {
+     final url = Uri.parse('http://68.178.163.174:5001/job/sectors');
+
+     Response res = await get(url);
+
+     setState(() {
+       sectors = jsonDecode(res.body);
+     });
+   }
 
   void getMarks() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -79,7 +101,7 @@ class _CareerPathState extends State<CareerPath> {
     final url2 = Uri.parse('http://68.178.163.174:5500/predict');
 
     Response res2 = await post(url2, body: jsonEncode(totalMarks),  headers: {"Content-Type": "application/json"});
-    print(jsonDecode(res2.body));
+    // print(jsonDecode(res2.body));
     var resbody2 = jsonDecode(res2.body);
 
     var career = resbody2['career_probability'].split('     ');
@@ -93,9 +115,49 @@ class _CareerPathState extends State<CareerPath> {
     });
   }
 
+  void getCareerPath() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? user_id = prefs.getString('user_id');
+    final url = Uri.parse('http://68.178.163.174:5001/job/cognitive_domain_mean?student_id=${user_id}');
+
+    Response res = await get(url);
+
+    print(jsonDecode(res.body));
+
+    var resbody = jsonDecode(res.body);
+
+    resbody.sort((a, b) {
+      return a['percentage'].compareTo(b['percentage']) as int;
+    });
+
+
+
+    final url2 = Uri.parse('http://68.178.163.174:5001/job/competency/filter?domain_id=${resbody.last['domain_id']}&sector_id=${sector_id}');
+    final url3 = Uri.parse('http://68.178.163.174:5001/job/competency/filter?domain_id=${resbody[resbody.length - 2]['domain_id']}&sector_id=${sector_id}');
+    final url4 = Uri.parse('http://68.178.163.174:5001/job/competency/filter?domain_id=${resbody[resbody.length - 3]['domain_id']}&sector_id=${sector_id}');
+
+    Response res2 = await get(url2);
+    Response res3 = await get(url3);
+    Response res4 = await get(url4);
+
+    print(jsonDecode(res2.body));
+
+    var third = {'name': resbody.last['domain'], 'percentage': resbody.last['percentage']};
+    var second = {'name': resbody[resbody.length - 2]['domain'], 'percentage': resbody[resbody.length - 2]['percentage']};
+    var first = {'name': resbody[resbody.length - 3]['domain'], 'percentage': resbody[resbody.length - 3]['percentage']};
+
+    setState(() {
+      suggestion = true;
+      data = [first, second, third];
+      careers = [jsonDecode(res2.body), jsonDecode(res3.body), jsonDecode(res4.body)];
+    });
+  }
+
   @override
   void initState() {
-    getMarks();
+    // getMarks();
+
+    getSectors();
     // data = [
     //   {
     //     'name': 'Doctor',
@@ -121,22 +183,81 @@ class _CareerPathState extends State<CareerPath> {
 
         child: Column(
           children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text('Suggested Career Path:', style: TextStyle(fontSize: 19.5, fontWeight: FontWeight.bold),),
+            
+            CustomDropdown(value: sector_id, data: sectors, onChanged: (value) {
+              setState(() {
+                sector_id = value;
+              });
+            }, fieldNames: ['name', 'id'], hint: 'Select Sector',),
+
+          ElevatedButton(onPressed: (){
+            getCareerPath();
+
+
+          }, child: Text('Get Suggested Career')),
+            
+          Visibility(
+            visible: suggestion,
+            child: Column(
+              children: [
+                SfCartesianChart(
+                      primaryXAxis: CategoryAxis(),
+                      primaryYAxis: NumericAxis(minimum: 0, maximum: 100, interval: 10),
+                      tooltipBehavior: _tooltip,
+                      series: <CartesianSeries<dynamic, String>>[
+                        BarSeries<dynamic, String>(
+                            dataSource: data,
+                            xValueMapper: ( data, _) => data['name'],
+                            yValueMapper: ( data, _) => data['percentage'],
+                            name: 'Career',
+                            color: Color.fromRGBO(8, 142, 255, 1))
+                      ]),
+
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Suggested Career Path:', style: TextStyle(fontSize: 19.5, fontWeight: FontWeight.bold),),
+                ),
+                
+                Row(
+                  children: [
+                    SizedBox(width: 20,),
+                    Text('First Suggestions:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
+                    SizedBox(width: 10,),
+                    if(careers.isNotEmpty)
+                      for(var i in careers[0])
+                        Text('${i['job_name']},')
+
+
+                  ],
+                ),
+
+                Row(
+                  children: [
+                    SizedBox(width: 20,),
+                    Text('Second Suggestions:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
+                    SizedBox(width: 10,),
+                    if(careers.isNotEmpty)
+                      for(var i in careers[1])
+                        Text('${i['job_name']},')
+
+                  ],
+                ),
+
+                Row(
+                  children: [
+                    SizedBox(width: 20,),
+                    Text('Third Suggestions:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
+                    SizedBox(width: 10,),
+                    if(careers.isNotEmpty)
+                      for(var i in careers[2])
+                        Text('${i['job_name']},')
+
+                  ],
+                )
+
+              ],
+            ),
           ),
-            SfCartesianChart(
-                primaryXAxis: CategoryAxis(),
-                primaryYAxis: NumericAxis(minimum: 0, maximum: 100, interval: 10),
-                tooltipBehavior: _tooltip,
-                series: <CartesianSeries<dynamic, String>>[
-                  BarSeries<dynamic, String>(
-                      dataSource: data,
-                      xValueMapper: ( data, _) => data['name'],
-                      yValueMapper: ( data, _) => data['percentage'],
-                      name: 'Career',
-                      color: Color.fromRGBO(8, 142, 255, 1))
-                ]),
           ],
         ),
       )

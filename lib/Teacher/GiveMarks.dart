@@ -30,7 +30,27 @@ class _GiveMarksState extends State<GiveMarks> {
     {'name':'blooms'}, {'name':'mcq'}
   ];
 
+  String? exam_id;
 
+  List exams = [];
+
+  void get_exams() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? class_id = prefs.getString('class_id');
+    String? teacher_role = prefs.getString('teacher_role');
+    String? subject_id = prefs.getString('subject_id');
+    String? course_id = prefs.getString('course_id');
+
+    var courseorclassid = teacher_role == 'Up to HSC' ? 'class_id=${class_id}&subject_id=${subject_id}' : teacher_role == 'Undergraduate' ? 'course_id=${course_id}' : '';
+
+    final url = Uri.parse('http://68.178.163.174:5001/exam/school/blooms/exam_name/?${courseorclassid}');
+
+    Response res = await get(url);
+
+    setState(() {
+      exams = jsonDecode(res.body);
+    });
+  }
 
   getStudents() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -39,7 +59,7 @@ class _GiveMarksState extends State<GiveMarks> {
     String? subject_id = prefs.getString('subject_id');
     String? course_id = prefs.getString('course_id');
 
-      var courseorclassid = teacher_role == 'Up to HSC' ? 'class_id=${class_id}&subject_id=${subject_id}' : teacher_role == 'Undergraduate' ? 'course_id=${course_id}' : '';
+      var courseorclassid = teacher_role == 'Up to HSC' ? 'class_id=${class_id}&subject_id=${subject_id}&exam_id=${exam_id}' : teacher_role == 'Undergraduate' ? 'course_id=${course_id}&exam_id=${exam_id}' : '';
 
       final url = Uri.parse('http://68.178.163.174:5001/exam/school/blooms/answers?${courseorclassid}');
 
@@ -171,7 +191,8 @@ class _GiveMarksState extends State<GiveMarks> {
   @override void initState() {
     // TODO: implement initState
     super.initState();
-    getStudents();
+    get_exams();
+
   }
   @override
   Widget build(BuildContext context) {
@@ -180,8 +201,17 @@ class _GiveMarksState extends State<GiveMarks> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+          SizedBox(height: 10,),
 
+            CustomDropdown(value: exam_id, data: exams, onChanged: (value){
+              setState(() {
+                exam_id = value;
+              });
+            }, fieldNames: ['exam_name', 'exam_id'], hint: 'Exam Name',),
 
+            ElevatedButton(onPressed: () {
+              getStudents();
+            }, child: Text('Search')),
 
             SizedBox(height: 20,),
 

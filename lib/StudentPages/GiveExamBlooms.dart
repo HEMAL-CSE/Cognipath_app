@@ -21,6 +21,28 @@ class _GiveExamBloomsState extends State<GiveExamBlooms> {
   List questions = [];
   var existingAnswers = {};
 
+  String? exam_id;
+
+  List exams = [];
+
+  void get_exams() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? user_id = prefs.getString('user_id');
+    String? class_id = prefs.getString('class_id');
+    String? student_role = prefs.getString('student_role');
+    String? course_id = prefs.getString('course_id');
+
+    var courseorclassid = student_role == 'Up to HSC' ? 'subject_id=${subject}' : student_role == 'Undergraduate' ? 'course_id=${course_id}' : '';
+
+    final url = Uri.parse('http://68.178.163.174:5001/exam/school/blooms/exam_name/?${courseorclassid}');
+
+    Response res = await get(url);
+
+    setState(() {
+      exams = jsonDecode(res.body);
+    });
+  }
+
   getSubjects() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? class_id = await prefs.getString('class_id');
@@ -41,7 +63,7 @@ class _GiveExamBloomsState extends State<GiveExamBlooms> {
     String? student_role = prefs.getString('student_role');
     String? course_id = prefs.getString('course_id');
 
-    var courseorclassid = student_role == 'Up to HSC' ? 'subject_id=${subject}' : student_role == 'Undergraduate' ? 'course_id=${course_id}' : '';
+    var courseorclassid = student_role == 'Up to HSC' ? 'subject_id=${subject}&exam_id=${exam_id}' : student_role == 'Undergraduate' ? 'course_id=${course_id}&exam_id=${exam_id}' : '';
 
   print(courseorclassid);
 
@@ -55,7 +77,7 @@ class _GiveExamBloomsState extends State<GiveExamBlooms> {
       var resbody = jsonDecode(res.body);
 
       for(var i in resbody){
-        final url2 = Uri.parse('http://68.178.163.174:5001/exam/school/blooms/answers?${courseorclassid}&student_id=${user_id}&ques_id=${i['ques_id']}&exam_id=${i['exam_id']}');
+        final url2 = Uri.parse('http://68.178.163.174:5001/exam/school/blooms/answers?${courseorclassid}&student_id=${user_id}&ques_id=${i['ques_id']}');
         Response res = await get(url2);
         print(jsonDecode(res.body));
         var resbody2 = jsonDecode(res.body);
@@ -148,7 +170,7 @@ class _GiveExamBloomsState extends State<GiveExamBlooms> {
               child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Text(
-              'Chapter Wise Question based on Blooms:',
+              'Subject Wise Question based on Blooms:',
               style: TextStyle(
                 color: Colors.purpleAccent[700],
                 fontSize: 20,
@@ -160,7 +182,16 @@ class _GiveExamBloomsState extends State<GiveExamBlooms> {
             setState(() {
               subject = value;
             });
+            get_exams();
+
           }, fieldNames: ['name', 'id']),
+
+
+          CustomDropdown(value: exam_id, data: exams, onChanged: (value){
+            setState(() {
+              exam_id = value;
+            });
+          }, fieldNames: ['exam_name', 'exam_id'], hint: 'Exam Name',),
 
           SizedBox(height: 10,),
           ElevatedButton(onPressed: () {
