@@ -181,23 +181,23 @@ class _StudentDeshboardState extends State<StudentDeshboard> {
                 ],
               ),
             ),
-            SliverToBoxAdapter(
-              child: SizedBox(height: 150,),
-            ),
-            SliverToBoxAdapter(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(09.0),
-                    child: Text('Powered By', style: TextStyle(),),
-                  ),
-                  Image.asset('assets/logo.jfif', width: 90),
-
-                ],
-              ),
-            )
+            // SliverToBoxAdapter(
+            //   child: SizedBox(height: 150,),
+            // ),
+            // SliverToBoxAdapter(
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.center,
+            //     crossAxisAlignment: CrossAxisAlignment.center,
+            //     children: [
+            //       Padding(
+            //         padding: const EdgeInsets.all(09.0),
+            //         child: Text('Powered By', style: TextStyle(),),
+            //       ),
+            //       Image.asset('assets/logo.jfif', width: 90),
+            //
+            //     ],
+            //   ),
+            // )
           ],
         )
 
