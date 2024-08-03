@@ -24,6 +24,8 @@ class _CareerPathState extends State<CareerPath> {
 
    String? sector_id;
 
+   bool loading = false;
+
    bool suggestion = false;
    
    
@@ -116,6 +118,9 @@ class _CareerPathState extends State<CareerPath> {
   }
 
   void getCareerPath() async {
+     setState(() {
+       loading = true;
+     });
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? user_id = prefs.getString('user_id');
     final url = Uri.parse('http://68.178.163.174:5001/job/cognitive_domain_mean?student_id=${user_id}');
@@ -150,6 +155,7 @@ class _CareerPathState extends State<CareerPath> {
       suggestion = true;
       data = [first, second, third];
       careers = [jsonDecode(res2.body), jsonDecode(res3.body), jsonDecode(res4.body)];
+      loading = false;
     });
   }
 
@@ -196,7 +202,7 @@ class _CareerPathState extends State<CareerPath> {
 
           }, child: Text('Get Suggested Career')),
             
-          Visibility(
+         loading ? CircularProgressIndicator() : Visibility(
             visible: suggestion,
             child: Column(
               children: [

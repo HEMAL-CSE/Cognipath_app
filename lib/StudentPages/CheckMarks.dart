@@ -99,68 +99,115 @@ class _CheckMarksState extends State<CheckMarks> {
               getMarks();
             }, child: Text('Search')),
 
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: DataTable(
-                  headingRowColor: MaterialStateColor.resolveWith((states) => Colors.yellowAccent),
-                  border: TableBorder.all(
-                    width: 2,
+            // Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: SingleChildScrollView(
+            //     scrollDirection: Axis.horizontal,
+            //     child: DataTable(
+            //       headingRowColor: MaterialStateColor.resolveWith((states) => Colors.yellowAccent),
+            //       border: TableBorder.all(
+            //         width: 2,
+            //       ),
+            //       columns:  <DataColumn>[
+            //         DataColumn(
+            //           label: Expanded(
+            //             child: Text(
+            //               'SUBJECT',
+            //               style: TextStyle(fontStyle: FontStyle.italic),),),
+            //         ),
+            //
+            //         DataColumn(
+            //           label: Expanded(
+            //             child: Text(
+            //               'QUESTION NUMBER',
+            //               style: TextStyle(fontStyle: FontStyle.italic),),),
+            //         ),
+            //         DataColumn(
+            //           label: Expanded(
+            //             child: Center(
+            //               child: Text(
+            //                 'QUESTION CATEGORY', style: TextStyle(fontStyle: FontStyle.italic),),
+            //             ),),
+            //         ),
+            //         DataColumn(
+            //           label: Expanded(
+            //             child: Center(
+            //               child: Text(
+            //                 'QUESTION POINT', style: TextStyle(fontStyle: FontStyle.italic),),
+            //             ),),
+            //         ),
+            //
+            //         DataColumn(
+            //           label: Expanded(
+            //             child: Center(
+            //               child: Text(
+            //                 'TOTAL SCORE', style: TextStyle(fontStyle: FontStyle.italic,),),
+            //             ),),
+            //         ),
+            //       ],
+            //       rows:  <DataRow>[
+            //         for(var i in marks)
+            //           for(var j in i[i.keys.toList()[0]])
+            //         DataRow(
+            //           cells: <DataCell>[
+            //             DataCell(Center(child: Text('${j['subject_name']}'))),
+            //             DataCell(Center(child: Text('${marks.indexOf(i) + 1}'))),
+            //             DataCell(Center(child: Text('Blooms'))),
+            //             DataCell(Center(child: Text('${j['ques_point']}'))),
+            //             DataCell(Center(child: Text('${j['marks'] == null ? 'Invalid': j['marks']}'))),
+            //           ],
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
+
+            for(var i in marks)
+              for(var j in i[i.keys.toList()[0]])
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 7, horizontal: 12),
+                  child: Card(
+                    color: Colors.grey[300],
+                    child: Container(
+                      padding: EdgeInsets.all(20),
+                        width: double.infinity,
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                Text('Subject Name: ', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+                                Text('${j['subject_name']}')
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text('Question Number: ', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+                                Text('${marks.indexOf(i) + 1}')
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text('Category: ', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+                                Text('Blooms')
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text('Question Point: ', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+                                Text('${j['ques_point']}')
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text('Marks: ', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+                                Text('${j['marks'] == null ? 'Invalid': j['marks']}')
+                              ],
+                            ),
+                          ],
+                        ),
+                    ),
                   ),
-                  columns:  <DataColumn>[
-                    DataColumn(
-                      label: Expanded(
-                        child: Text(
-                          'SUBJECT',
-                          style: TextStyle(fontStyle: FontStyle.italic),),),
-                    ),
-
-                    DataColumn(
-                      label: Expanded(
-                        child: Text(
-                          'QUESTION NUMBER',
-                          style: TextStyle(fontStyle: FontStyle.italic),),),
-                    ),
-                    DataColumn(
-                      label: Expanded(
-                        child: Center(
-                          child: Text(
-                            'QUESTION CATEGORY', style: TextStyle(fontStyle: FontStyle.italic),),
-                        ),),
-                    ),
-                    DataColumn(
-                      label: Expanded(
-                        child: Center(
-                          child: Text(
-                            'QUESTION POINT', style: TextStyle(fontStyle: FontStyle.italic),),
-                        ),),
-                    ),
-
-                    DataColumn(
-                      label: Expanded(
-                        child: Center(
-                          child: Text(
-                            'TOTAL SCORE', style: TextStyle(fontStyle: FontStyle.italic,),),
-                        ),),
-                    ),
-                  ],
-                  rows:  <DataRow>[
-                    for(var i in marks)
-                      for(var j in i[i.keys.toList()[0]])
-                    DataRow(
-                      cells: <DataCell>[
-                        DataCell(Center(child: Text('${j['subject_name']}'))),
-                        DataCell(Center(child: Text('${marks.indexOf(i) + 1}'))),
-                        DataCell(Center(child: Text('Blooms'))),
-                        DataCell(Center(child: Text('${j['ques_point']}'))),
-                        DataCell(Center(child: Text('${j['marks'] == null ? 'Invalid': j['marks']}'))),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
+                )
           ],
         ),
       )
