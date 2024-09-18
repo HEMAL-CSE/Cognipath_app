@@ -169,7 +169,7 @@ class _LoginState extends State<Login> {
   // }
 
   void login() async {
-    final url = Uri.parse('http://68.178.163.174:5001/user/login_with_phone_number');
+    final url = Uri.parse('https://text.cognipath.net/user/login_with_phone_number');
 
     Map data = {'phone': phone_number.text, 'password': password.text};
 
@@ -191,7 +191,7 @@ class _LoginState extends State<Login> {
     }
 
     if (res.statusCode == 201) {
-      if(resbody['role'] != 'Student' && resbody['role'] != 'Teacher'){
+      if(resbody['role'] != 'Student' && resbody['role'] != 'Teacher' && resbody['role'] != 'HR admin'){
         Fluttertoast.showToast(
             msg: "User is not a student or teacher",
             toastLength: Toast.LENGTH_SHORT,
@@ -217,8 +217,12 @@ class _LoginState extends State<Login> {
         await prefs.setString('token', resbody['token']);
         await prefs.setString('role', resbody['role']);
         await prefs.setString('user_id', resbody['user_id'].toString());
+        if(resbody['role'] == 'HR admin'){
+          Navigator.pushNamed(context, '/employee');
+        }
+
         if(resbody['role'] == 'Student'){
-          final url = Uri.parse('http://68.178.163.174:5001/student/?user_id=${resbody['user_id']}');
+          final url = Uri.parse('https://text.cognipath.net/student/?user_id=${resbody['user_id']}');
           Response res = await get(url);
           var resbody2 = jsonDecode(res.body);
           print(resbody2);
@@ -233,7 +237,7 @@ class _LoginState extends State<Login> {
           Navigator.pushNamed(context, '/studentDeshboard');
         }
         if(resbody['role'] == 'Teacher'){
-          final url = Uri.parse('http://68.178.163.174:5001/teacher/?user_id=${resbody['user_id']}');
+          final url = Uri.parse('https://text.cognipath.net/teacher/?user_id=${resbody['user_id']}');
           Response res = await get(url);
           var resbody2 = jsonDecode(res.body);
           print(resbody2);
@@ -267,7 +271,7 @@ class _LoginState extends State<Login> {
               Center(
                 child: Container(
                   padding: EdgeInsets.all(15),
-                  child: Text('Login', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.blueAccent),),
+                  child: Text('Login', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.blue),),
                   decoration: BoxDecoration(
 
                   ),
@@ -286,9 +290,14 @@ class _LoginState extends State<Login> {
 
               Container( padding: EdgeInsets.all(10),
                 margin: EdgeInsets.all(04),
-                child: ElevatedButton(onPressed: buttonDisabled ? null : (){
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                  ),
+                  onPressed: buttonDisabled ? null : (){
                 login();
-                }, child: const Text("Login"),
+                }, child: const Text("Login", style: TextStyle(fontSize: 15.5),),
 
 
                 ),

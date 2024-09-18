@@ -25,7 +25,6 @@ class _HomeState extends State<Home> {
 
   ];
 
-
   @override
   void initState() {
     // TODO: implement initState
@@ -87,9 +86,7 @@ class _HomeState extends State<Home> {
                 },
               ),
             ),
-            SizedBox(
-              height: 20,
-            ),
+            SizedBox(height: 16,),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -98,7 +95,7 @@ class _HomeState extends State<Home> {
               ],
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.fromLTRB(07, 0, 07, 0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -117,7 +114,7 @@ class _HomeState extends State<Home> {
                 ],
               ),
             ),
-        
+
             GestureDetector(
               onTap: () async {
                 // Navigator.pushNamed(context, '/addbreedingdata');
@@ -128,7 +125,7 @@ class _HomeState extends State<Home> {
                   Navigator.pushNamed(context, '/studentDeshboard');
                 }else{
                   Navigator.pushNamed(context, '/');
-        
+
                 }
               },
               child: Card(
@@ -139,14 +136,14 @@ class _HomeState extends State<Home> {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: Container(
-                  height: 150,
-                  width: 150,
+                  height: 148,
+                  width: 148,
                   child: Center(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [ 
-                        Text('Student Login',textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white),),
+                      children: [
+                        Text('Students',textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.white),),
                         SizedBox(height: 10,),
                         Container(
                             padding: EdgeInsets.all(10),
@@ -162,9 +159,9 @@ class _HomeState extends State<Home> {
                 ),
               ),
             ),
-        
+
             SizedBox(height: 04,),
-        
+
             GestureDetector(
               onTap: () async {
                 // Navigator.pushNamed(context, '/addbreedingdata');
@@ -174,7 +171,7 @@ class _HomeState extends State<Home> {
                   Navigator.pushNamed(context, '/teacherDeshboard');
                 }else{
                   Navigator.pushNamed(context, '/');
-        
+
                 }
               },
               child: Card(
@@ -185,14 +182,14 @@ class _HomeState extends State<Home> {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: Container(
-                  height: 150,
-                  width: 150,
+                  height: 148,
+                  width: 148,
                   child: Center(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text('Teacher Login',textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17,color: Colors.white),),
+                        Text('Teachers ',textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17,color: Colors.white),),
                         SizedBox(height: 10,),
                         Container(
                             padding: EdgeInsets.all(10),
@@ -209,42 +206,56 @@ class _HomeState extends State<Home> {
               ),
             ),
 
-          SizedBox(height: 14,),
 
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(09.0),
-                child: Text('Powered By', style: TextStyle(),),
-              ),
-              Image.asset('assets/logo.jfif', width: 92),
-
-            ],
-          ),
-        
-            SizedBox(height: 14,),
-        
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(09.0),
-                  child: Text('Powered By', style: TextStyle(),),
+            GestureDetector(
+              onTap: () async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                String? role = await prefs.getString('role');
+                if(role == 'HR admin'){
+                  Navigator.pushNamed(context, '/employee');
+                }else{
+                  Navigator.pushNamed(context, '/');
+                }
+              },
+              child: Card(
+                color: Color(0xff01013f),
+                elevation: 5,
+                margin: EdgeInsets.all(8),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
-                Image.asset('assets/logo.jfif', width: 92),
-        
-              ],
-            )
+                child: Container(
+                  height: 148,
+                  width: 148,
+                  child: Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Employers',textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17,color: Colors.white),),
+                        SizedBox(height: 10,),
+                        Container(
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.5),
+                                borderRadius: BorderRadius.circular(8)
+                            ),
+                            child: Icon(SimpleLineIcons.people, color: Colors.white,)
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+          SizedBox(height: 14,),
 
         ]
         ),
       ),
 
     );
-
   }
 
   Widget buildIndicator(bool isSelected) {

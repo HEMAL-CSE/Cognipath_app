@@ -39,7 +39,7 @@ class _CareerPathState extends State<CareerPath> {
    };
    
    void getSectors() async {
-     final url = Uri.parse('http://68.178.163.174:5001/job/sectors');
+     final url = Uri.parse('https://text.cognipath.net/job/sectors');
 
      Response res = await get(url);
 
@@ -52,7 +52,7 @@ class _CareerPathState extends State<CareerPath> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? user_id = prefs.getString('user_id');
 
-    final url = Uri.parse('http://68.178.163.174:5001/exam/school/blooms/answers?student_id=${user_id}');
+    final url = Uri.parse('https://text.cognipath.net/exam/school/blooms/answers?student_id=${user_id}');
 
     Response res = await get(url);
 
@@ -118,7 +118,7 @@ class _CareerPathState extends State<CareerPath> {
   void getCareerPath() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? user_id = prefs.getString('user_id');
-    final url = Uri.parse('http://68.178.163.174:5001/job/cognitive_domain_mean?student_id=${user_id}');
+    final url = Uri.parse('https://text.cognipath.net/job/cognitive_domain_mean?student_id=${user_id}');
 
     Response res = await get(url);
 
@@ -132,9 +132,9 @@ class _CareerPathState extends State<CareerPath> {
 
 
 
-    final url2 = Uri.parse('http://68.178.163.174:5001/job/competency/filter?domain_id=${resbody.last['domain_id']}&sector_id=${sector_id}');
-    final url3 = Uri.parse('http://68.178.163.174:5001/job/competency/filter?domain_id=${resbody[resbody.length - 2]['domain_id']}&sector_id=${sector_id}');
-    final url4 = Uri.parse('http://68.178.163.174:5001/job/competency/filter?domain_id=${resbody[resbody.length - 3]['domain_id']}&sector_id=${sector_id}');
+    final url2 = Uri.parse('https://text.cognipath.net/job/competency/filter?domain_id=${resbody.last['domain_id']}&sector_id=${sector_id}');
+    final url3 = Uri.parse('https://text.cognipath.net/job/competency/filter?domain_id=${resbody[resbody.length - 2]['domain_id']}&sector_id=${sector_id}');
+    final url4 = Uri.parse('https://text.cognipath.net/job/competency/filter?domain_id=${resbody[resbody.length - 3]['domain_id']}&sector_id=${sector_id}');
 
     Response res2 = await get(url2);
     Response res3 = await get(url3);
@@ -190,11 +190,15 @@ class _CareerPathState extends State<CareerPath> {
               });
             }, fieldNames: ['name', 'id'], hint: 'Select Sector',),
 
-          ElevatedButton(onPressed: (){
+          ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xff01013f),
+                foregroundColor: Colors.white,
+              ),
+              onPressed: (){
             getCareerPath();
 
-
-          }, child: Text('Get Suggested Career')),
+          }, child: Text('Get Suggested Career', style: TextStyle(fontSize: 15),)),
             
           Visibility(
             visible: suggestion,

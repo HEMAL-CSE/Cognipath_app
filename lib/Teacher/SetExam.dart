@@ -32,7 +32,7 @@ class _SetExamState extends State<SetExam> {
     String? subject_id = prefs.getString('subject_id');
     String? course_id = prefs.getString('course_id');
 
-    final url = teacher_role == 'Up to HSC' ?  Uri.parse('http://68.178.163.174:5001/questions/school?class_id=${class_id}&subject_id=${subject_id}') : teacher_role == 'Undergraduate' ? Uri.parse('http://68.178.163.174:5001/questions/?course_id=${course_id}') : Uri.parse('http://68.178.163.174:5001/questions');
+    final url = teacher_role == 'Up to HSC' ?  Uri.parse('https://text.cognipath.net/questions/school?class_id=${class_id}&subject_id=${subject_id}') : teacher_role == 'Undergraduate' ? Uri.parse('https://text.cognipath.net/questions/?course_id=${course_id}') : Uri.parse('https://text.cognipath.net/questions');
 
 
     Response res = await get(url);
@@ -72,7 +72,7 @@ class _SetExamState extends State<SetExam> {
     String? subject_id = prefs.getString('subject_id');
     String? course_id = prefs.getString('course_id');
 
-    final url = Uri.parse('http://68.178.163.174:5001/exam/school/add');
+    final url = Uri.parse('https://text.cognipath.net/exam/school/add');
 
     Map data = {
       'exam_category': 'blooms',
@@ -86,7 +86,7 @@ class _SetExamState extends State<SetExam> {
 
     var resbody = jsonDecode(res.body);
     
-    final url1 = Uri.parse('http://68.178.163.174:5001/exam/school/blooms/add');
+    final url1 = Uri.parse('https://text.cognipath.net/exam/school/blooms/add');
     for(var i in questions){
       if(i[i.keys.toList()[0]][0]['selected'] == true){
         Map data1 = {'stem_id': i.keys.toList()[0].toString(), 'exam_id': resbody[0]['id'].toString()};
@@ -176,8 +176,14 @@ class _SetExamState extends State<SetExam> {
                 ),
               ),
 
-            SizedBox(height: 10,),
-            ElevatedButton(onPressed: () {
+            SizedBox(height: 12,),
+            ElevatedButton(
+
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xff01013f),
+                  foregroundColor: Colors.white,
+                ),
+                onPressed: () {
               if(exam_name.text.isEmpty == true){
                 Fluttertoast.showToast(
                     msg: "Please give exam name",
@@ -193,7 +199,7 @@ class _SetExamState extends State<SetExam> {
                 addExam();
 
               }
-            }, child: Text('Submit'))
+            }, child: Text('Submit', style: TextStyle(fontSize: 15),))
           ],
         ),
       ),

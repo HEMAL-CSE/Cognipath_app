@@ -4,22 +4,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_font_icons/flutter_font_icons.dart';
 
-class StudentDeshboard extends StatefulWidget {
-  const StudentDeshboard({super.key});
+class Employee extends StatefulWidget {
+  const Employee({super.key});
 
   @override
-  State<StudentDeshboard> createState() => _StudentDeshboardState();
+  State<Employee> createState() => _EmployeeState();
 }
 
-class _StudentDeshboardState extends State<StudentDeshboard> {
-
+class _EmployeeState extends State<Employee> {
   int currentIndex = 0;
   final PageController controller = PageController();
 
   List<String> images = [
-    "assets/student1.jpg",
-    "assets/student2.jpg",
-    "assets/student3.jfif",
+    "assets/HR1.jpg",
+    "assets/HR2.jfif",
+    "assets/HR3.jpg",
     // "assets/cog4.jfif",
     // "assets/banner4.jpg",
 
@@ -42,12 +41,11 @@ class _StudentDeshboardState extends State<StudentDeshboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Student Dashboard',),
+        appBar: CustomAppBar(title: 'Employers Dashboard',),
 
         body: CustomScrollView(
           primary: false,
           slivers: [
-
             SliverToBoxAdapter(
               child: Column(
                 children: [
@@ -111,13 +109,13 @@ class _StudentDeshboardState extends State<StudentDeshboard> {
             ),
 
             SliverToBoxAdapter(
-              child: SizedBox(height: 30,),
+              child: SizedBox(height: 28,),
             ),
             SliverPadding(
               padding: EdgeInsets.symmetric(horizontal: 16),
               sliver: SliverGrid.count(
-                crossAxisSpacing: 08,
-                mainAxisSpacing: 08,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 06,
                 crossAxisCount: 2,
                 children: [
                   GestureDetector(
@@ -139,7 +137,7 @@ class _StudentDeshboardState extends State<StudentDeshboard> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text('Learning',textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.5, color: Colors.white)),
+                              Text('Job Sector',textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)),
                               SizedBox(height: 10,),
                               Container(
                                   padding: EdgeInsets.all(10),
@@ -147,7 +145,7 @@ class _StudentDeshboardState extends State<StudentDeshboard> {
                                       color: Colors.white.withOpacity(0.5),
                                       borderRadius: BorderRadius.circular(8)
                                   ),
-                                  child: Icon(Icons.book_online, color: Colors.white,)
+                                  child: Icon(Entypo.suitcase, color: Colors.white,)
                               )
                             ],
                           ),
@@ -158,7 +156,7 @@ class _StudentDeshboardState extends State<StudentDeshboard> {
 
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, '/giveExamblooms');
+                      //Navigator.pushNamed(context, '/giveExamblooms');
                     },
                     child: Card(
                       color: Color(0xff01013f),
@@ -175,7 +173,7 @@ class _StudentDeshboardState extends State<StudentDeshboard> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(' Exam', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.5, color: Colors.white),),
+                              Text('Job Position', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),),
                               SizedBox(height: 10,),
                               Container(
                                   padding: EdgeInsets.all(10),
@@ -194,7 +192,7 @@ class _StudentDeshboardState extends State<StudentDeshboard> {
 
                   GestureDetector(
                     onTap: () {
-                       Navigator.pushNamed(context, '/checkmarks');
+                     // Navigator.pushNamed(context, '/checkmarks');
                     },
                     child: Card(
                       color: Color(0xff01013f),
@@ -211,7 +209,7 @@ class _StudentDeshboardState extends State<StudentDeshboard> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text('Marks', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.5, color: Colors.white), textAlign: TextAlign.center,),
+                              Text('Compentancy', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white), textAlign: TextAlign.center,),
                               SizedBox(height: 10,),
                               Container(
                                   padding: EdgeInsets.all(10),
@@ -230,7 +228,7 @@ class _StudentDeshboardState extends State<StudentDeshboard> {
 
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, '/career_path');
+                      //Navigator.pushNamed(context, '/career_path');
                     },
                     child: Card(
                       color: Color(0xff01013f),
@@ -247,7 +245,7 @@ class _StudentDeshboardState extends State<StudentDeshboard> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text('Career Path',textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),),
+                              Text('Mapping',textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),),
                               SizedBox(height: 10,),
                               Container(
                                   padding: EdgeInsets.all(10),
@@ -255,7 +253,7 @@ class _StudentDeshboardState extends State<StudentDeshboard> {
                                       color: Colors.white.withOpacity(0.5),
                                       borderRadius: BorderRadius.circular(8)
                                   ),
-                                  child: Icon(Entypo.graduation_cap, color: Colors.white,)
+                                  child: Icon(Icons.join_full_outlined, color: Colors.white,)
                               )
                             ],
                           ),
@@ -263,9 +261,6 @@ class _StudentDeshboardState extends State<StudentDeshboard> {
                       ),
                     ),
                   ),
-
-
-
 
 
                 ],

@@ -39,16 +39,14 @@ class _CreateBloomsQuestionState extends State<CreateBloomsQuestion> {
     return String.fromCharCode(c.codeUnitAt(0) + 1);
   }
 
-
   
   getDomains() async {
-     final url = Uri.parse('http://68.178.163.174:5001/questions/cognitive_domains');
+     final url = Uri.parse('https://text.cognipath.net/questions/cognitive_domains');
      Response res = await get(url);
 
      setState(() {
        blooms = jsonDecode(res.body);
      });
-
   }
 
   getQuestions() async {
@@ -59,7 +57,7 @@ class _CreateBloomsQuestionState extends State<CreateBloomsQuestion> {
      String? subject_id = prefs.getString('subject_id');
      String? course_id = prefs.getString('course_id');
 
-     final url = teacher_role == 'Up to HSC' ?  Uri.parse('http://68.178.163.174:5001/questions/school?class_id=${class_id}&subject_id=${subject_id}') : teacher_role == 'Undergraduate' ? Uri.parse('http://68.178.163.174:5001/questions/?course_id=${course_id}') : Uri.parse('http://68.178.163.174:5001/questions');
+     final url = teacher_role == 'Up to HSC' ?  Uri.parse('https://text.cognipath.net/questions/school?class_id=${class_id}&subject_id=${subject_id}') : teacher_role == 'Undergraduate' ? Uri.parse('https://text.cognipath.net/questions/?course_id=${course_id}') : Uri.parse('https://text.cognipath.net/questions');
 
      Response res = await get(url);
 
@@ -97,7 +95,7 @@ class _CreateBloomsQuestionState extends State<CreateBloomsQuestion> {
     String? subject_id = prefs.getString('subject_id');
     String? course_id = prefs.getString('course_id');
 
-     final url = Uri.parse('http://68.178.163.174:5001/questions/school/add/stem');
+     final url = Uri.parse('https://text.cognipath.net/questions/school/add/stem');
 
      Map data = {
        'stem':question.text,
@@ -108,12 +106,11 @@ class _CreateBloomsQuestionState extends State<CreateBloomsQuestion> {
 
      Response res = await post(url, body: data);
 
-
      var resbody = jsonDecode(res.body);
      print(resbody);
 
      for(var i in questionOptions){
-       final url2 = Uri.parse('http://68.178.163.174:5001/questions/school/add/ques');
+       final url2 = Uri.parse('https://text.cognipath.net/questions/school/add/ques');
        Map data2 = {'marks': i['marks'].text,'description':i['ques'].text,'stem_id': resbody[0]['id'].toString(), 'ques_point': i['option'],  'domain_id': i['blooms'].toString(), };
        Response res2 = await post(url2, body: data2);
        print(res2);
@@ -134,16 +131,13 @@ class _CreateBloomsQuestionState extends State<CreateBloomsQuestion> {
      }
      getQuestions();
 
-
   }
-
   @override void initState() {
     // TODO: implement initState
     super.initState();
     getDomains();
     getQuestions();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -243,9 +237,14 @@ class _CreateBloomsQuestionState extends State<CreateBloomsQuestion> {
               ),
             ),
               SizedBox(height: 10,),
-              ElevatedButton(onPressed: () {
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xff01013f),
+                    foregroundColor: Colors.white,
+                  ),
+                  onPressed: () {
                     addQues();
-              }, child: Text('Submit')),
+              }, child: Text('Submit', style: TextStyle(fontSize: 15),)),
 
             SizedBox(height: 20,),
 
@@ -290,7 +289,6 @@ class _CreateBloomsQuestionState extends State<CreateBloomsQuestion> {
                                   // Text('${}')
                                 ],
                               ),
-
 
                           ],
                         ),

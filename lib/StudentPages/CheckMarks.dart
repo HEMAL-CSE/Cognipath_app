@@ -31,7 +31,7 @@ class _CheckMarksState extends State<CheckMarks> {
 
     // var courseorclassid = student_role == 'Up to HSC' ? 'subject_id=${subject}' : student_role == 'Undergraduate' ? 'course_id=${course_id}' : '';
 
-    final url = Uri.parse('http://68.178.163.174:5001/exam/school/blooms/exam_name/');
+    final url = Uri.parse('https://text.cognipath.net/exam/school/blooms/exam_name/');
 
     Response res = await get(url);
 
@@ -44,7 +44,7 @@ class _CheckMarksState extends State<CheckMarks> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? user_id = prefs.getString('user_id');
 
-    final url = Uri.parse('http://68.178.163.174:5001/exam/school/blooms/answers?student_id=${user_id}&exam_id=${exam_id}');
+    final url = Uri.parse('https://text.cognipath.net/exam/school/blooms/answers?student_id=${user_id}&exam_id=${exam_id}');
 
     Response res = await get(url);
 
@@ -71,7 +71,6 @@ class _CheckMarksState extends State<CheckMarks> {
     setState(() {
       marks = result;
     });
-
   }
 
   @override void initState() {
@@ -94,73 +93,84 @@ class _CheckMarksState extends State<CheckMarks> {
               });
             }, fieldNames: ['exam_name', 'exam_id'], hint: 'Exam Name',),
 
-            SizedBox(height: 10,),
-            ElevatedButton(onPressed: () {
-              getMarks();
-            }, child: Text('Search')),
+            SizedBox(height: 08,),
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xff01013f),
+                  foregroundColor: Colors.white,
 
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: DataTable(
-                  headingRowColor: MaterialStateColor.resolveWith((states) => Colors.yellowAccent),
-                  border: TableBorder.all(
-                    width: 2,
-                  ),
-                  columns:  <DataColumn>[
-                    DataColumn(
-                      label: Expanded(
-                        child: Text(
-                          'SUBJECT',
-                          style: TextStyle(fontStyle: FontStyle.italic),),),
-                    ),
-
-                    DataColumn(
-                      label: Expanded(
-                        child: Text(
-                          'QUESTION NUMBER',
-                          style: TextStyle(fontStyle: FontStyle.italic),),),
-                    ),
-                    DataColumn(
-                      label: Expanded(
-                        child: Center(
-                          child: Text(
-                            'QUESTION CATEGORY', style: TextStyle(fontStyle: FontStyle.italic),),
-                        ),),
-                    ),
-                    DataColumn(
-                      label: Expanded(
-                        child: Center(
-                          child: Text(
-                            'QUESTION POINT', style: TextStyle(fontStyle: FontStyle.italic),),
-                        ),),
-                    ),
-
-                    DataColumn(
-                      label: Expanded(
-                        child: Center(
-                          child: Text(
-                            'TOTAL SCORE', style: TextStyle(fontStyle: FontStyle.italic,),),
-                        ),),
-                    ),
-                  ],
-                  rows:  <DataRow>[
-                    for(var i in marks)
-                      for(var j in i[i.keys.toList()[0]])
-                    DataRow(
-                      cells: <DataCell>[
-                        DataCell(Center(child: Text('${j['subject_name']}'))),
-                        DataCell(Center(child: Text('${marks.indexOf(i) + 1}'))),
-                        DataCell(Center(child: Text('Blooms'))),
-                        DataCell(Center(child: Text('${j['ques_point']}'))),
-                        DataCell(Center(child: Text('${j['marks'] == null ? 'Invalid': j['marks']}'))),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
             ),
+                onPressed: () {
+              getMarks();
+            }, child: Text('Search', style: TextStyle(fontSize: 15.5),)),
+
+            // Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: SingleChildScrollView(
+            //     scrollDirection: Axis.horizontal,
+            //     child: DataTable(
+            //       headingRowColor: MaterialStateColor.resolveWith((states) => Colors.yellowAccent),
+            //       border: TableBorder.all(
+            //         width: 2,
+            //       ),
+            //       columns:  <DataColumn>[
+            //         DataColumn(
+            //           label: Expanded(
+            //             child: Text(
+            //               'SUBJECT',
+            //               style: TextStyle(fontStyle: FontStyle.italic),),),
+            //         ),
+            //
+            //         DataColumn(
+            //           label: Expanded(
+            //             child: Text(
+            //               'QUESTION NUMBER',
+            //               style: TextStyle(fontStyle: FontStyle.italic),),),
+            //         ),
+            //         DataColumn(
+            //           label: Expanded(
+            //             child: Center(
+            //               child: Text(
+            //                 'QUESTION CATEGORY', style: TextStyle(fontStyle: FontStyle.italic),),
+            //             ),),
+            //         ),
+            //         DataColumn(
+            //           label: Expanded(
+            //             child: Center(
+            //               child: Text(
+            //                 'QUESTION POINT', style: TextStyle(fontStyle: FontStyle.italic),),
+            //             ),),
+            //         ),
+            //
+            //         DataColumn(
+            //           label: Expanded(
+            //             child: Center(
+            //               child: Text(
+            //                 'TOTAL SCORE', style: TextStyle(fontStyle: FontStyle.italic,),),
+            //             ),),
+            //         ),
+            //       ],
+            //       rows:  <DataRow>[
+            //         for(var i in marks)
+            //           for(var j in i[i.keys.toList()[0]])
+            //         DataRow(
+            //           cells: <DataCell>[
+            //             DataCell(Center(child: Text('${j['subject_name']}'))),
+            //             DataCell(Center(child: Text('${marks.indexOf(i) + 1}'))),
+            //             DataCell(Center(child: Text('Blooms'))),
+            //             DataCell(Center(child: Text('${j['ques_point']}'))),
+            //             DataCell(Center(child: Text('${j['marks'] == null ? 'Invalid': j['marks']}'))),
+            //           ],
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
+
+
+            
+
+
           ],
         ),
       )

@@ -34,7 +34,7 @@ class _GiveExamBloomsState extends State<GiveExamBlooms> {
 
     var courseorclassid = student_role == 'Up to HSC' ? 'subject_id=${subject}' : student_role == 'Undergraduate' ? 'course_id=${course_id}' : '';
 
-    final url = Uri.parse('http://68.178.163.174:5001/exam/school/blooms/exam_name/?${courseorclassid}');
+    final url = Uri.parse('https://text.cognipath.net/exam/school/blooms/exam_name/?${courseorclassid}');
 
     Response res = await get(url);
 
@@ -47,7 +47,7 @@ class _GiveExamBloomsState extends State<GiveExamBlooms> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? class_id = await prefs.getString('class_id');
 
-    final url = Uri.parse('http://68.178.163.174:5001/class/subject?class_id=${class_id}');
+    final url = Uri.parse('https://text.cognipath.net/class/subject?class_id=${class_id}');
 
     Response res = await get(url);
 
@@ -67,7 +67,7 @@ class _GiveExamBloomsState extends State<GiveExamBlooms> {
 
   print(courseorclassid);
 
-    final url = Uri.parse('http://68.178.163.174:5001/exam/school/blooms/?${courseorclassid}');
+    final url = Uri.parse('https://text.cognipath.net/exam/school/blooms/?${courseorclassid}');
 
       Response res = await get(url);
       print(url);
@@ -77,7 +77,7 @@ class _GiveExamBloomsState extends State<GiveExamBlooms> {
       var resbody = jsonDecode(res.body);
 
       for(var i in resbody){
-        final url2 = Uri.parse('http://68.178.163.174:5001/exam/school/blooms/answers?${courseorclassid}&student_id=${user_id}&ques_id=${i['ques_id']}');
+        final url2 = Uri.parse('https://text.cognipath.net/exam/school/blooms/answers?${courseorclassid}&student_id=${user_id}&ques_id=${i['ques_id']}');
         Response res = await get(url2);
         print(jsonDecode(res.body));
         var resbody2 = jsonDecode(res.body);
@@ -119,7 +119,7 @@ class _GiveExamBloomsState extends State<GiveExamBlooms> {
   addAnswers() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? user_id = prefs.getString('user_id');
-    final url = Uri.parse('http://68.178.163.174:5001/exam/school/blooms/answers/add');
+    final url = Uri.parse('https://text.cognipath.net/exam/school/blooms/answers/add');
 
     for(var i in questions){
       for(var j in i[i.keys.toList()[0]]){
@@ -128,7 +128,7 @@ class _GiveExamBloomsState extends State<GiveExamBlooms> {
           Response res = await post(url, body: data);
           print(res.statusCode);
         }else if(j['answer'].text != '' && existingAnswers.containsKey(j['ques_id']) == true){
-          final url = Uri.parse('http://68.178.163.174:5001/exam/school/blooms/answers/update?id=${existingAnswers[j['ques_id']]['answer_id']}');
+          final url = Uri.parse('https://text.cognipath.net/exam/school/blooms/answers/update?id=${existingAnswers[j['ques_id']]['answer_id']}');
           Map data = { 'answer': j['answer'].text};
           Response res = await put(url, body: data);
           print(res.statusCode);
@@ -194,9 +194,17 @@ class _GiveExamBloomsState extends State<GiveExamBlooms> {
           }, fieldNames: ['exam_name', 'exam_id'], hint: 'Exam Name',),
 
           SizedBox(height: 10,),
-          ElevatedButton(onPressed: () {
-              getQuestions();
-          }, child: Text('Search')),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(32, 02, 32, 0),
+            child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xff01013f),
+                  foregroundColor: Colors.white,
+                ),
+                onPressed: () {
+                getQuestions();
+            }, child: Text('Search', style: TextStyle(fontSize: 15),)),
+          ),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             decoration: BoxDecoration(
@@ -243,9 +251,16 @@ class _GiveExamBloomsState extends State<GiveExamBlooms> {
                   ),
                 ),
 
-                ElevatedButton(onPressed: (){
+                SizedBox(height: 02,),
+
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xff01013f),
+                      foregroundColor: Colors.white,
+                    ),
+                    onPressed: (){
                     addAnswers();
-                }, child: Text('Submit'))
+                }, child: Text('Submit', style: TextStyle(fontSize: 15),))
 
               ],
             ),

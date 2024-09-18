@@ -43,7 +43,7 @@ class _GiveMarksState extends State<GiveMarks> {
 
     var courseorclassid = teacher_role == 'Up to HSC' ? 'class_id=${class_id}&subject_id=${subject_id}' : teacher_role == 'Undergraduate' ? 'course_id=${course_id}' : '';
 
-    final url = Uri.parse('http://68.178.163.174:5001/exam/school/blooms/exam_name/?${courseorclassid}');
+    final url = Uri.parse('https://text.cognipath.net/exam/school/blooms/exam_name/?${courseorclassid}');
 
     Response res = await get(url);
 
@@ -61,7 +61,7 @@ class _GiveMarksState extends State<GiveMarks> {
 
       var courseorclassid = teacher_role == 'Up to HSC' ? 'class_id=${class_id}&subject_id=${subject_id}&exam_id=${exam_id}' : teacher_role == 'Undergraduate' ? 'course_id=${course_id}&exam_id=${exam_id}' : '';
 
-      final url = Uri.parse('http://68.178.163.174:5001/exam/school/blooms/answers?${courseorclassid}');
+      final url = Uri.parse('https://text.cognipath.net/exam/school/blooms/answers?${courseorclassid}');
 
       Response res = await get(url);
       print(url);
@@ -98,7 +98,7 @@ class _GiveMarksState extends State<GiveMarks> {
       for(var i in students){
         for(var k in i[i.keys.toList()[0]]){
           print(k);
-          final url = Uri.parse('http://68.178.163.174:5001/exam/school/blooms/marks/add?id=${k['answer_id']}');
+          final url = Uri.parse('https://text.cognipath.net/exam/school/blooms/marks/add?id=${k['answer_id']}');
           Map data = {'marks': k['given_marks'].text};
           if(k['given_marks'].text != ''){
             Response res = await put(url, body: data);
@@ -121,7 +121,7 @@ class _GiveMarksState extends State<GiveMarks> {
 
 
   // getExam() async {
-  //   final url = Uri.parse('http://68.178.163.174:5001/exam/${category}?chapter_id=${chapter}');
+  //   final url = Uri.parse('https://text.cognipath.net/exam/${category}?chapter_id=${chapter}');
   //
   //   Response res = await get(url);
   //   print(url);
@@ -209,11 +209,16 @@ class _GiveMarksState extends State<GiveMarks> {
               });
             }, fieldNames: ['exam_name', 'exam_id'], hint: 'Exam Name',),
 
-            ElevatedButton(onPressed: () {
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xff01013f),
+                  foregroundColor: Colors.white,
+                ),
+                onPressed: () {
               getStudents();
-            }, child: Text('Search')),
+            }, child: Text('Search', style: TextStyle(fontSize: 15),)),
 
-            SizedBox(height: 20,),
+            SizedBox(height: 15,),
 
             for(var i in students)
               Card(
@@ -270,9 +275,14 @@ class _GiveMarksState extends State<GiveMarks> {
                 ),
               ),
 
-            ElevatedButton(onPressed: () {
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xff01013f),
+                  foregroundColor: Colors.white,
+                ),
+                onPressed: () {
               addMarks();
-            }, child: Text('Submit'))
+            }, child: Text('Submit', style: TextStyle(fontSize: 15),))
 
           ],
         ),

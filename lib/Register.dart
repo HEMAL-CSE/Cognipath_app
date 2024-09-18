@@ -136,7 +136,7 @@ String? role;
   // }
 
   void studentRegister(user_id) async {
-    final url = Uri.parse('http://68.178.163.174:5001/student/add');
+    final url = Uri.parse('https://text.cognipath.net/student/add');
 
     Map data = {'user_id': user_id.toString(), 'course_id': course, 'class_id': cls, 'institute': institute.text, 'role': role};
 
@@ -147,7 +147,7 @@ String? role;
   }
 
   void getClasses() async {
-    final url = Uri.parse('http://68.178.163.174:5001/class');
+    final url = Uri.parse('https://text.cognipath.net/class');
 
     Response res = await get(url);
 
@@ -157,7 +157,7 @@ String? role;
 
 
   }
-  // void teacherRegister(user_id) async //   final url = Uri.parse('http://68.178.163.174:5001/teacher/add');
+  // void teacherRegister(user_id) async //   final url = Uri.parse('https://text.cognipath.net/teacher/add');
   //
   //   Map data = {'user_id': user_id.toString(), 'institute': institute.text};
   //
@@ -173,7 +173,7 @@ String? role;
   //
   //   try{
   //     Response res = await get(Uri.parse(
-  //         'http://68.178.163.174:5001/user/check_phone_number?phone_number=${phone_number.text}'));
+  //         'https://text.cognipath.net/user/check_phone_number?phone_number=${phone_number.text}'));
   //     if (res.statusCode == 201) {
   //       var json = jsonDecode(res.body);
   //       if (json['checked'] == 0) {
@@ -227,7 +227,7 @@ String? role;
   // }
 
   void getCourses() async {
-    final url = Uri.parse('http://68.178.163.174:5001/course');
+    final url = Uri.parse('https://text.cognipath.net/course');
 
     Response res = await get(url);
 
@@ -246,7 +246,7 @@ String? role;
     });
 
 
-      final url = Uri.parse('http://68.178.163.174:5001/user/register');
+      final url = Uri.parse('https://text.cognipath.net/user/register');
 
   Map data = {'name': name.text, 'email': email.text, 'mobile': phone_number.text, 'password': password.text, 'role': 'Student'};
 

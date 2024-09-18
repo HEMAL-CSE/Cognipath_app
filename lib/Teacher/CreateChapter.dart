@@ -21,7 +21,7 @@ class _CreateChapterState extends State<CreateChapter> {
   List chapters = [];
 
   getChapters() async {
-    final url = Uri.parse('http://68.178.163.174:5001/chapter/');
+    final url = Uri.parse('https://text.cognipath.net/chapter/');
 
     Response res = await get(url);
     
@@ -34,7 +34,7 @@ class _CreateChapterState extends State<CreateChapter> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     String? course_id = await prefs.getString('course_id');
-    final url = Uri.parse('http://68.178.163.174:5001/chapter/add');
+    final url = Uri.parse('https://text.cognipath.net/chapter/add');
     Map data = {'chapter_name': chapter.text, 'course_id': course_id.toString()};
 
     Response res = await post(url, body: data);

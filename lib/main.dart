@@ -1,3 +1,4 @@
+import 'package:cognipath/Employee/employee.dart';
 import 'package:cognipath/Home.dart';
 import 'package:cognipath/Login.dart';
 import 'package:cognipath/Register.dart';
@@ -53,6 +54,7 @@ class MyApp extends StatelessWidget {
         '/checkmarks': (context) => CheckMarks(),
         '/career_path': (context) => CareerPath(),
 
+        '/employee': (context) => Employee(),
       },
 
     );
